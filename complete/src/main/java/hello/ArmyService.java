@@ -1,5 +1,6 @@
 package hello;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,29 +22,27 @@ public class ArmyService {
     }
     public ArmyService(){}
 
-    private Army setUnits(Army army){
-        army.setUnits(unitsInArmyService.getAllByArmy(army));
-        army.calculatePower();
-        return army;
-    }
-
     /**
      * Find and return army with given id
      * @param id of army
      * @return army
      */
 
-    public Army getById (int id){return setUnits(armyRepository.findOne(id));}
+    public Army getById (int id){
+        Army army = armyRepository.findOne(id);
+        Hibernate.initialize(army.getUnits());
+        return army;
+    }
 
     /**
      * Find and return all the armies
      * @return armies
      */
 
-    public Collection<Army> getAll(){
-        Collection<Army> armies=new ArrayList<>();
-        for(Army army:armyRepository.findAll()){
-            armies.add(setUnits(army));
+    public Iterable<Army> getAll(){
+        Iterable<Army> armies=armyRepository.findAll();
+        for(Army army:armies){
+            Hibernate.initialize(army.getUnits());
         }
         return armies;
     }
@@ -54,7 +53,7 @@ public class ArmyService {
      * @return saved army
      */
 
-    public Army saveOrUpdate(Army army){return setUnits(armyRepository.save(army));}
+    public Army saveOrUpdate(Army army){return armyRepository.save(army);}
 
     /**
      * delete arny with given id
@@ -77,6 +76,8 @@ public class ArmyService {
     public void delete(Army army){armyRepository.delete(army);}
 
     public Army getFirstById(int id){
-        return setUnits( armyRepository.findFirstById(id));
+        Army army = armyRepository.findFirstById(id);
+        Hibernate.initialize(army.getUnits());
+        return army;
     }
 }

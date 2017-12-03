@@ -1,13 +1,15 @@
 package hello;
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "cities")
 public class Cities {
     private int id;
     private String name;
-    private Collection<BuildingsInCities> buildings;
+    //private Collection<BuildingsInCities> buildings;
 
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator = "citySeq")
@@ -31,6 +33,16 @@ public class Cities {
         this.name = name;
     }
 
+    private Set<Buildings> buildings=new HashSet<>();
+    @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public Set<Buildings> getBuildings() {
+        return buildings;
+    }
+
+    public void setBuildings(Set<Buildings> buildings) {
+        this.buildings = buildings;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,15 +63,6 @@ public class Cities {
         return result;
     }
 
-    @OneToMany(mappedBy = "city")
-    public Collection<BuildingsInCities> getBuildings() {
-        return buildings;
-    }
-
-    public void setBuildings(Collection<BuildingsInCities> buildings) {
-        this.buildings = buildings;
-    }
-
     public Cities() {
     }
 
@@ -73,8 +76,8 @@ public class Cities {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", buildings=";
-        for(BuildingsInCities buildingsInCities:buildings){
-            ret+=buildingsInCities.getBuilding().toString()+" ";
+        for(Buildings building:buildings){
+            ret+=building.toString()+" ";
         }
         ret+="}";
         return ret;

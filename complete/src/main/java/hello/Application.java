@@ -22,7 +22,7 @@ public class Application {
 	}
 
 	@Bean
-	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService,BuildingsInCitiesService buildingsInCitiesService, CharactersService charactersService,AbilitiesService abilitiesService, CharactersAbilitiesService charactersAbilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService ) {
+	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService ) {
 		return (args) -> {
 			raceService.saveOrUpdate(new Race("Эльфы"));
             raceService.saveOrUpdate(new Race("Орки"));
@@ -55,21 +55,6 @@ public class Application {
                 log.info(units.get(i).toString());
             }
 
-            buildingsService.saveOrUpdate(new Buildings("Дом эпических крушителей",1,10,"военное",null,20,races.get(1),units.get(0)));
-            buildingsService.saveOrUpdate(new Buildings("Дерево эльфийских лучников",1,10,"военное",null,20,races.get(0),units.get(1)));
-            buildingsService.saveOrUpdate(new Buildings("Хата ороков",1,0,"финансовое",2000,null,races.get(1),null));
-            buildingsService.saveOrUpdate(new Buildings("Дворец эльфов",1,0,"финансовое",2000,null,races.get(0),null));
-
-            List<Buildings> buildings=new ArrayList<>();
-            for (Buildings building:buildingsService.getAll()) {
-                buildings.add(building);
-            }
-            log.info("Buildings");
-            log.info("---------------------------------------");
-            for(int i=0;i<buildings.size();i++){
-                log.info(buildings.get(i).toString());
-            }
-
             citiesService.saveOrUpdate(new Cities("Мордор"));
             citiesService.saveOrUpdate(new Cities("Город лесных эльфов"));
 
@@ -78,23 +63,21 @@ public class Application {
                 cities.add(city);
             }
 
-            buildingsInCitiesService.saveOrUpdate(new BuildingsInCities(cities.get(0),buildings.get(0)));
-            buildingsInCitiesService.saveOrUpdate(new BuildingsInCities(cities.get(0),buildings.get(2)));
-            buildingsInCitiesService.saveOrUpdate(new BuildingsInCities(cities.get(1),buildings.get(1)));
-            buildingsInCitiesService.saveOrUpdate(new BuildingsInCities(cities.get(1),buildings.get(3)));
+            buildingsService.saveOrUpdate(new Buildings("Дом эпических крушителей",1,10,"военное",null,20,races.get(1),units.get(0),cities.get(0)));
+            buildingsService.saveOrUpdate(new Buildings("Дерево эльфийских лучников",1,10,"военное",null,20,races.get(0),units.get(1),cities.get(0)));
+            buildingsService.saveOrUpdate(new Buildings("Хата ороков",1,0,"финансовое",2000,null,races.get(1),null,cities.get(1)));
+            buildingsService.saveOrUpdate(new Buildings("Дворец эльфов",1,0,"финансовое",2000,null,races.get(0),null,cities.get(1)));
 
-            for(int i=0;i<cities.size();i++){
-                Collection<BuildingsInCities> buildings1=new ArrayList<>();
-                for(BuildingsInCities buildingsInCities: buildingsInCitiesService.getAllByCity(cities.get(i))){
-                    buildings1.add(buildingsInCities);
-                }
-                cities.get(i).setBuildings(buildings1);
+            log.info("Buildings");
+            log.info("---------------------------------------");
+            for(Buildings building:buildingsService.getAll()){
+                log.info(building.toString());
             }
+
             log.info("Cities");
             log.info("---------------------------------------");
-            for(int i=0;i<cities.size();i++){
-
-                log.info(cities.get(i).toString());
+            for(Cities city:citiesService.getAll()){
+                log.info(city.toString());
             }
 
             charactersService.saveOrUpdate(new Characters("Леголас","Лучник",races.get(1)));
@@ -105,12 +88,12 @@ public class Application {
                 characters.add(character);
             }
 
-            abilitiesService.saveOrUpdate(new Abilities("Выстрел","нанесение урона",0,2,50));
-            abilitiesService.saveOrUpdate(new Abilities("Мощный выстрел","нанесение урона",3,4,150));
-            abilitiesService.saveOrUpdate(new Abilities("Меткий выстрел","нанесение урона",9,7,500));
-            abilitiesService.saveOrUpdate(new Abilities("Удар","нанесение урона",0,2,60));
-            abilitiesService.saveOrUpdate(new Abilities("Удар Дубиной","нанесение урона",3,5,200));
-            abilitiesService.saveOrUpdate(new Abilities("Сокрушающий удар","нанесение урона",9,9,630));
+            abilitiesService.saveOrUpdate(new Abilities("Выстрел","нанесение урона",0,2,50,characters.get(0)));
+            abilitiesService.saveOrUpdate(new Abilities("Мощный выстрел","нанесение урона",3,4,150,characters.get(0)));
+            abilitiesService.saveOrUpdate(new Abilities("Меткий выстрел","нанесение урона",9,7,500,characters.get(0)));
+            abilitiesService.saveOrUpdate(new Abilities("Удар","нанесение урона",0,2,60,characters.get(1)));
+            abilitiesService.saveOrUpdate(new Abilities("Удар Дубиной","нанесение урона",3,5,200,characters.get(1)));
+            abilitiesService.saveOrUpdate(new Abilities("Сокрушающий удар","нанесение урона",9,9,630,characters.get(1)));
 
             List<Abilities> abilities = new ArrayList<>();
             for(Abilities ability: abilitiesService.getAll()){
@@ -122,26 +105,12 @@ public class Application {
                 log.info(abilities.get(i).toString());
             }
 
-            charactersAbilitiesService.saveOrUpdate(new CharactersAbilities(characters.get(0),abilities.get(0)));
-            charactersAbilitiesService.saveOrUpdate(new CharactersAbilities(characters.get(0),abilities.get(1)));
-            charactersAbilitiesService.saveOrUpdate(new CharactersAbilities(characters.get(0),abilities.get(2)));
-            charactersAbilitiesService.saveOrUpdate(new CharactersAbilities(characters.get(1),abilities.get(3)));
-            charactersAbilitiesService.saveOrUpdate(new CharactersAbilities(characters.get(1),abilities.get(4)));
-            charactersAbilitiesService.saveOrUpdate(new CharactersAbilities(characters.get(1),abilities.get(5)));
-
-            for(int i=0;i<characters.size();i++){
-                Collection<CharactersAbilities> abilities1=new ArrayList<>();
-                for(CharactersAbilities charactersAbilities: charactersAbilitiesService.getAllByCharacter(characters.get(i))){
-                    abilities1.add(charactersAbilities);
-                }
-                characters.get(i).setAbilites(abilities1);
-            }
-
             log.info("Characters");
             log.info("---------------------------------------");
-            for(int i=0;i<characters.size();i++){
-                log.info(characters.get(i).toString());
+            for(Characters character:charactersService.getAll()){
+                log.info(character.toString());
             }
+            log.info(charactersService.getByName("Леголас").toString());
 
             armyService.saveOrUpdate(new Army());
             armyService.saveOrUpdate(new Army());
@@ -153,18 +122,6 @@ public class Application {
             for(Army army: armyService.getAll()){
                 armies.add(army);
             }
-            /*
-            for(int i=0;i<4;i++){
-                armies.add(new Army());
-            }
-
-            List<UnitsInArmy> unitsInArmies=new ArrayList<>();
-                unitsInArmies.add(new UnitsInArmy(20,armies.get(0),units.get(0)));
-                unitsInArmies.add(new UnitsInArmy(20,armies.get(1),units.get(1)));
-                unitsInArmies.add(new UnitsInArmy(20,armies.get(2),units.get(0)));
-                unitsInArmies.add(new UnitsInArmy(20,armies.get(3),units.get(0)));
-                unitsInArmies.add(new UnitsInArmy(20,armies.get(3),units.get(1)));
-*/
 
             unitsInArmyService.saveOrUpdate(new UnitsInArmy(20,armies.get(0),units.get(0)));
             unitsInArmyService.saveOrUpdate(new UnitsInArmy(20,armies.get(1),units.get(1)));
@@ -172,15 +129,6 @@ public class Application {
             unitsInArmyService.saveOrUpdate(new UnitsInArmy(10,armies.get(3),units.get(0)));
             unitsInArmyService.saveOrUpdate(new UnitsInArmy(10,armies.get(3),units.get(1)));
 
-
-            /*for(int i=0;i<armies.size();i++){
-                Collection<UnitsInArmy> units1=new ArrayList<>();
-                for(UnitsInArmy unitsInArmy: unitsInArmyService.getAllByArmy(armies.get(i))){
-                    units1.add(unitsInArmy);
-                }
-                armies.get(i).setUnits(units1);
-                armies.get(i).calculatePower();
-            }*/
             armies.clear();
             for(Army army: armyService.getAll()){
                 armies.add(army);
@@ -188,9 +136,10 @@ public class Application {
 
             log.info("Armies");
             log.info("---------------------------------------");
-            for(int i=0;i<armies.size();i++){
-                log.info(armies.get(i).toString());
+            for(Army army:armyService.getAll()){
+                log.info(army.toString());
             }
+            log.info(armyService.getFirstById(1).toString());
 
             locationsService.saveOrUpdate(new Locations("Засада Орков",1,100,1000,armies.get(2)));
             locationsService.saveOrUpdate(new Locations("Странный союз",1,100,1000,armies.get(3)));
@@ -215,35 +164,11 @@ public class Application {
             usersService.saveOrUpdate(new Users("Need to create a nick",CryptWithMD5.cryptWithMD5("secretPassword"),"jabber1",3000,50.0,20,50,"пользователь",characters.get(0),cities.get(0),armies.get(0)));
             usersService.saveOrUpdate(new Users("Really need to create a nick",CryptWithMD5.cryptWithMD5("secretPassword"),"jabber2",5000,66.6666,15,30,"пользователь",characters.get(1),cities.get(1),armies.get(1)));
 
-            List<Users> users=new ArrayList<>();
-            for(Users user:usersService.getAll()){
-                Collection<UnitsInArmy> units1=new ArrayList<>();
-                for(UnitsInArmy unitsInArmy:unitsInArmyService.getAllByArmy(user.getArmy())){
-                    units1.add(unitsInArmy);
-                }
-                user.getArmy().setUnits(units1);
-                Collection<CharactersAbilities> abilities1=new ArrayList<>();
-                for(CharactersAbilities charactersAbilities:charactersAbilitiesService.getAllByCharacter(user.getCharacter())){
-                    abilities1.add(charactersAbilities);
-                }
-                user.getCharacter().setAbilites(abilities1);
-                Collection<BuildingsInCities> buildings1=new ArrayList<>();
-                for(BuildingsInCities buildingsInCities: buildingsInCitiesService.getAllByCity(user.getCity())){
-                    buildings1.add(buildingsInCities);
-                }
-                user.getCity().setBuildings(buildings1);
-                users.add(user);
-
-            }
             log.info("Users");
             log.info("---------------------------------------");
-            for(int i=0;i<users.size();i++){
-                log.info(users.get(i).toString());
+            for(Users user:usersService.getAll()){
+                log.info(user.toString());
             }
-
-
-
-
 			log.info("");
 		};
 	}

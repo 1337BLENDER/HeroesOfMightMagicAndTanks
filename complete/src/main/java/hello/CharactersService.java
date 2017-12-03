@@ -1,6 +1,7 @@
 package hello;
 
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,12 @@ public class CharactersService {
      * @return founded character
      */
     
-    public Characters getById (int id){return characterRepository.findOne(id);}
+    public Characters getById (int id){
+        Characters character = characterRepository.findOne(id);
+        Hibernate.initialize(character.getAbilities());
+        Hibernate.initialize(character.getRace());
+        return character;
+    }
 
     /**
      * Find and return one character with given name
@@ -28,14 +34,26 @@ public class CharactersService {
      * @return founded character
      */
 
-    public Characters getByName (String name){return characterRepository.findByName(name);}
+    public Characters getByName (String name){
+        Characters character= characterRepository.findByName(name);
+        Hibernate.initialize(character.getAbilities());
+        Hibernate.initialize(character.getRace());
+        return characterRepository.findByName(name);
+    }
 
     /**
      * Find and return all the characters
      * @return characters
      */
 
-    public Iterable<Characters> getAll(){return characterRepository.findAll();}
+    public Iterable<Characters> getAll(){
+        Iterable<Characters> characters = characterRepository.findAll();
+        for(Characters character:characters){
+            Hibernate.initialize(character.getAbilities());
+            Hibernate.initialize(character.getRace());
+        }
+        return characters;
+    }
 
     /**
      *Save character if it's new or update if it's already exists

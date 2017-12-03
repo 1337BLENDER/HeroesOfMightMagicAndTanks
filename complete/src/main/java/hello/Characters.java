@@ -2,6 +2,7 @@ package hello;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -11,8 +12,8 @@ public class Characters {
     private int id;
     private String clazz;
     private Race race;
-    private Collection<CharactersAbilities> abilites;
-    private Set<Abilities> abilities;
+    //private Collection<CharactersAbilities> abilites;
+
 
     @Basic
     @Column(name = "name", nullable = false, length = 255)
@@ -78,13 +79,15 @@ public class Characters {
         this.race = race;
     }
 
-    @OneToMany(mappedBy = "character")
-    public Collection<CharactersAbilities> getAbilites() {
-        return abilites;
+    private Set<Abilities> abilities=new HashSet<>();
+
+    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    public Set<Abilities> getAbilities() {
+        return abilities;
     }
 
-    public void setAbilites(Collection<CharactersAbilities> abilites) {
-        this.abilites = abilites;
+    public void setAbilities(Set<Abilities> abilities) {
+        this.abilities = abilities;
     }
 
     public Characters() {
@@ -108,8 +111,8 @@ public class Characters {
                 ", clazz='" + clazz + '\'' +
                 ", race=" + race +
                 ", abilites=";
-                for(CharactersAbilities charactersAbilities:abilites){
-                    ret+=charactersAbilities.getAbility().toString();
+                for(Abilities ability:abilities){
+                    ret+=ability.toString();
                 }
                 ret+='}';
         return ret;

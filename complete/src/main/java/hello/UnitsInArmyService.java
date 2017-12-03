@@ -1,5 +1,6 @@
 package hello;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +23,26 @@ public class UnitsInArmyService {
      * @return founded unitsInArmy entity
      */
     
-    public UnitsInArmy getById (int id){return unitsInArmyRepository.findOne(id);}
+    public UnitsInArmy getById (int id){
+        UnitsInArmy unitsInArmy=unitsInArmyRepository.findOne(id);
+        Hibernate.initialize(unitsInArmy.getArmy());
+        Hibernate.initialize(unitsInArmy.getUnit());
+        return unitsInArmy;
+    }
 
     /**
      * Find and return all the unitsInArmy entities
      * @return unitsInArmy entities
      */
 
-    public Iterable<UnitsInArmy> getAll(){return unitsInArmyRepository.findAll();}
+    public Iterable<UnitsInArmy> getAll(){
+        Iterable<UnitsInArmy> unitsInArmies=unitsInArmyRepository.findAll();
+        for(UnitsInArmy unitsInArmy:unitsInArmies){
+            Hibernate.initialize(unitsInArmy.getUnit());
+            Hibernate.initialize(unitsInArmy.getArmy());
+        }
+        return unitsInArmies;
+    }
 
     /**
      * Find and return all buildingInCities entities with given army

@@ -87,6 +87,21 @@ public class Buildings {
         this.unitNumber = unitNumber;
     }
 
+    private Cities city= new Cities();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = false)
+    public Cities getCity() {
+        return city;
+    }
+
+    public void setCity(Cities city) {
+        this.city = city;
+    }
+
+
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -140,7 +155,7 @@ public class Buildings {
     public Buildings() {
     }
 
-    public Buildings(String name, int level, int cost, String type, Integer income, Integer unitNumber, Race race, Units unit) {
+    public Buildings(String name, int level, int cost, String type, Integer income, Integer unitNumber, Race race, Units unit, Cities city) {
         this.name = name;
         this.level = level;
         this.cost = cost;
@@ -149,6 +164,7 @@ public class Buildings {
         this.unitNumber = unitNumber;
         this.race = race;
         this.unit = unit;
+        this.city = city;
     }
 
     public Buildings(int id) {

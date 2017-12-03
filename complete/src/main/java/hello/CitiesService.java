@@ -1,5 +1,6 @@
 package hello;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,11 @@ public class CitiesService {
      * @return founded city
      */
 
-    public Cities getById (int id){return cityRepository.findOne(id);}
+    public Cities getById (int id){
+        Cities city=cityRepository.findOne(id);
+        Hibernate.initialize(city.getBuildings());
+        return city;
+    }
 
     /**
      * Find and return one city with given name
@@ -26,14 +31,24 @@ public class CitiesService {
      * @return founded city
      */
 
-    public Cities getByName (String name){return cityRepository.findByName(name);}
+    public Cities getByName (String name){
+        Cities city=cityRepository.findByName(name);
+        Hibernate.initialize(city.getBuildings());
+        return city;
+    }
 
     /**
      * Find and return all the cities
      * @return cities
      */
 
-    public Iterable<Cities> getAll(){return cityRepository.findAll();}
+    public Iterable<Cities> getAll(){
+        Iterable<Cities> cities=cityRepository.findAll();
+        for(Cities city:cities){
+            Hibernate.initialize(city.getBuildings());
+        }
+        return cities;
+    }
 
     /**
      *Save city if it's new or update if it's already exists

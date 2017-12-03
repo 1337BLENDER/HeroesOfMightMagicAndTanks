@@ -1,5 +1,6 @@
 package hello;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,17 @@ public class UsersService {
      * @return founded user
      */
 
-    public Users getById (int id){return userRepository.findOne(id);}
+    public Users getById (int id){
+        Users user = userRepository.findOne(id);
+        Hibernate.initialize(user.getArmy());
+        Hibernate.initialize(user.getArmy().getUnits());
+        Hibernate.initialize(user.getCharacter());
+        Hibernate.initialize(user.getCharacter().getAbilities());
+        Hibernate.initialize(user.getCity());
+        Hibernate.initialize(user.getCity().getBuildings());
+        Hibernate.initialize(user.getFriends());
+        return user;
+    }
 
     /**
      * Find and return one user with given nick
@@ -28,14 +39,36 @@ public class UsersService {
      * @return founded user
      */
 
-    public Users getByNick (String nick){return userRepository.findByNick(nick);}
+    public Users getByNick (String nick){
+        Users user = userRepository.findByNick(nick);
+        Hibernate.initialize(user.getArmy());
+        Hibernate.initialize(user.getArmy().getUnits());
+        Hibernate.initialize(user.getCharacter());
+        Hibernate.initialize(user.getCharacter().getAbilities());
+        Hibernate.initialize(user.getCity());
+        Hibernate.initialize(user.getCity().getBuildings());
+        Hibernate.initialize(user.getFriends());
+        return user;
+    }
 
     /**
      * Find and return all the users
      * @return users
      */
 
-    public Iterable<Users> getAll(){return userRepository.findAll();}
+    public Iterable<Users> getAll(){
+        Iterable<Users> users = userRepository.findAll();
+        for(Users user: users){
+            Hibernate.initialize(user.getArmy());
+            Hibernate.initialize(user.getArmy().getUnits());
+            Hibernate.initialize(user.getCharacter());
+            Hibernate.initialize(user.getCharacter().getAbilities());
+            Hibernate.initialize(user.getCity());
+            Hibernate.initialize(user.getCity().getBuildings());
+            Hibernate.initialize(user.getFriends());
+        }
+        return users;
+    }
 
     /**
      *Save user if it's new or update if it's already exists

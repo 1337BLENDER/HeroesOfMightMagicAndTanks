@@ -74,6 +74,18 @@ public class Abilities {
         this.damage = damage;
     }
 
+    private Characters character = new Characters();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "character_id", referencedColumnName = "id", nullable = false)
+    public Characters getCharacter() {
+        return character;
+    }
+
+    public void setCharacter(Characters character) {
+        this.character = character;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -111,6 +123,15 @@ public class Abilities {
         this.level = level;
         this.manaPoints = manaPoints;
         this.damage = damage;
+    }
+
+    public Abilities(String name, String type, int level, int manaPoints, int damage, Characters character) {
+        this.name = name;
+        this.type = type;
+        this.level = level;
+        this.manaPoints = manaPoints;
+        this.damage = damage;
+        this.character = character;
     }
 
     public Abilities(int id) {
