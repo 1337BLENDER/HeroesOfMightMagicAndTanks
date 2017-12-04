@@ -1,5 +1,6 @@
 package hello;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,20 +14,45 @@ public class FriendsService {
     public FriendsService(FriendsRepository friendRepository){this.friendRepository=friendRepository;}
     public FriendsService(){}
 
+    private void init(Friends friend){
+        Hibernate.initialize(friend.getUser1());
+        Hibernate.initialize(friend.getUser2());
+        Hibernate.initialize(friend.getUser1().getCity());
+        Hibernate.initialize(friend.getUser2().getCity());
+        Hibernate.initialize(friend.getUser1().getCharacter());
+        Hibernate.initialize(friend.getUser2().getCharacter());
+        Hibernate.initialize(friend.getUser1().getArmy());
+        Hibernate.initialize(friend.getUser2().getArmy());
+        Hibernate.initialize(friend.getUser1().getCity().getBuildings());
+        Hibernate.initialize(friend.getUser2().getCity().getBuildings());
+        Hibernate.initialize(friend.getUser1().getArmy().getUnits());
+        Hibernate.initialize(friend.getUser2().getArmy().getUnits());
+        Hibernate.initialize(friend.getUser1().getCharacter().getAbilities());
+        Hibernate.initialize(friend.getUser2().getCharacter().getAbilities());
+    }
 
     /**Find and return one friends entity with given id
      * @param id of required friends entity
      * @return founded friends entity
      */
-    
-    public Friends getById (int id){return friendRepository.findOne(id);}
+    public Friends getById (int id){
+        Friends friends=friendRepository.findOne(id);
+        init(friends);
+        return friendRepository.findOne(id);
+    }
 
     /**
      * Find and return all the friends entities
      * @return friends entities
      */
     
-    public Iterable<Friends> getAll(){return friendRepository.findAll();}
+    public Iterable<Friends> getAll(){
+        Iterable<Friends> friends=friendRepository.findAll();
+        for(Friends friend:friends){
+            init(friend);
+        }
+        return friends;
+    }
 
     /**
      * Find and return all buildingInCities entities with given user
@@ -34,7 +60,13 @@ public class FriendsService {
      * @return buildingInCities entities
      */
     
-    public Iterable<Friends> getAllByUser1(Users user){return friendRepository.findAllByUser1(user);}
+    public Iterable<Friends> getAllByUser1(Users user){
+        Iterable<Friends> friends=friendRepository.findAllByUser1(user);
+        for(Friends friend:friends){
+            init(friend);
+        }
+        return friends;
+    }
 
     /**
      *Save friends entity if it's new or update if it's already exists

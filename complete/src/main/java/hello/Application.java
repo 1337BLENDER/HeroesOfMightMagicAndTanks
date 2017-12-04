@@ -22,7 +22,7 @@ public class Application {
 	}
 
 	@Bean
-	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService ) {
+	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService, FriendsService friendsService ) {
 		return (args) -> {
 			raceService.saveOrUpdate(new Race("Эльфы"));
             raceService.saveOrUpdate(new Race("Орки"));
@@ -164,12 +164,24 @@ public class Application {
             usersService.saveOrUpdate(new Users("Need to create a nick",CryptWithMD5.cryptWithMD5("secretPassword"),"jabber1",3000,50.0,20,50,"пользователь",characters.get(0),cities.get(0),armies.get(0)));
             usersService.saveOrUpdate(new Users("Really need to create a nick",CryptWithMD5.cryptWithMD5("secretPassword"),"jabber2",5000,66.6666,15,30,"пользователь",characters.get(1),cities.get(1),armies.get(1)));
 
+            List<Users> users=new ArrayList<>();
+
             log.info("Users");
             log.info("---------------------------------------");
             for(Users user:usersService.getAll()){
                 log.info(user.toString());
+                users.add(user);
             }
 			log.info("");
+            friendsService.saveOrUpdate(new Friends(users.get(0),users.get(1)));
+            friendsService.saveOrUpdate(new Friends(users.get(1),users.get(0)));
+
+            log.info("Friends");
+            log.info("---------------------------------------");
+            for(Friends friend:friendsService.getAll()){
+                log.info(friend.toString());
+            }
+
 		};
 	}
 

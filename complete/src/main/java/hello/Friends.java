@@ -67,4 +67,13 @@ public class Friends {
     public Friends(int id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Friends{" +
+                "id=" + id +
+                ", user1=" + user1 +
+                ", user2=" + user2 +
+                '}';
+    }
 }
