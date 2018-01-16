@@ -24,10 +24,10 @@ public class Application {
 	@Bean
 	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService, FriendsService friendsService ) {
 		return (args) -> {
-			raceService.saveOrUpdate(new Race("Эльфы"));
-            raceService.saveOrUpdate(new Race("Орки"));
-            raceService.saveOrUpdate(new Race("Гномы"));
-            raceService.saveOrUpdate(new Race("Люди"));
+			raceService.saveOrUpdate(new Race("Эльфы","/icons/races/elf.jpg"));
+            raceService.saveOrUpdate(new Race("Орки","/icons/races/orc.jpg"));
+            raceService.saveOrUpdate(new Race("Гномы","/icons/races/dwarf.jpg"));
+            raceService.saveOrUpdate(new Race("Люди","/icons/races/human.jpg"));
 
 			//raceService.saveOrUpdate(new Race("Хоббиты"));
 
@@ -41,9 +41,9 @@ public class Application {
                 log.info(races.get(i).toString());
             }
 
-            unitsService.saveOrUpdate(new Units("Эпический крушитель",10,"ближний бой",666,null,null,228,1488,100500,races.get(1)));
-            unitsService.saveOrUpdate(new Units("Эльфийский лучник",3,"дальний бой",200,10,15,200,1300,300,races.get(0)));
-            unitsService.saveOrUpdate(new Units("dhg",100,"ближний бой",100,null,null,208,1488,100500,races.get(1)));
+            unitsService.saveOrUpdate(new Units("Эпический крушитель",10,"ближний бой",666,null,null,228,1488,100500,races.get(1),"icons/units/epic.jpg","icons/units/battle_epic.jpg"));
+            unitsService.saveOrUpdate(new Units("Эльфийский лучник",3,"дальний бой",200,10,15,200,1300,300,races.get(0),"icons/units/elf_shooter.jpg","icons/units/battle_elf_shooter.jpg"));
+            unitsService.saveOrUpdate(new Units("dhg",100,"ближний бой",100,null,null,208,1488,100500,races.get(1),"icons/units/dhg.jpg","icons/units/battle_dhg.jpg"));
 			Iterable<Units> unitsIter=unitsService.getAll();
 			List<Units>units=new ArrayList<>();
             for (Units unit:unitsIter) {
@@ -80,8 +80,8 @@ public class Application {
                 log.info(city.toString());
             }
 
-            charactersService.saveOrUpdate(new Characters("Леголас","Лучник",races.get(1)));
-            charactersService.saveOrUpdate(new Characters("Саурон","Маг",races.get(0)));
+            charactersService.saveOrUpdate(new Characters("Леголас","Лучник",races.get(1),"icons/characters/legolas.jpg","icons/characters/battle_legolas.jpg"));
+            charactersService.saveOrUpdate(new Characters("Саурон","Маг",races.get(0),"icons/characters/sauron.jpg","icons/characters/battle_sauron.jpg"));
 
             List<Characters> characters = new ArrayList<>();
             for(Characters character:charactersService.getAll()){
@@ -161,8 +161,8 @@ public class Application {
                 log.info(locations.get(i).toString());
             }
 
-            usersService.saveOrUpdate(new Users("Need to create a nick",CryptWithMD5.cryptWithMD5("secretPassword"),"jabber1",3000,50.0,20,50,"пользователь",characters.get(0),cities.get(0),armies.get(0)));
-            usersService.saveOrUpdate(new Users("Really need to create a nick",CryptWithMD5.cryptWithMD5("secretPassword"),"jabber2",5000,66.6666,15,30,"пользователь",characters.get(1),cities.get(1),armies.get(1)));
+            usersService.saveOrUpdate(new Users("Need to create a nick","secretPassword","jabber1",3000,50.0,20,50,characters.get(0),cities.get(0),armies.get(0),"ROLE_USER"));
+            usersService.saveOrUpdate(new Users("Really need to create a nick","1234","jabber2",5000,66.6666,15,30,characters.get(1),cities.get(1),armies.get(1),"ROLE_USER"));
 
             List<Users> users=new ArrayList<>();
 
@@ -182,6 +182,8 @@ public class Application {
                 log.info(friend.toString());
             }
 
+            log.info("--------------------------------------");
+            log.info(buildingsService.getById(1).getUnit().toString());
 		};
 	}
 

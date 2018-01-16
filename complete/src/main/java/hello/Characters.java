@@ -12,6 +12,8 @@ public class Characters {
     private int id;
     private String clazz;
     private Race race;
+    private String iconUrl;//маленькая иконка(можно верезать из большой)
+    private String battleIconUrl;//вид в бою (большая картинка во весь рост)
     //private Collection<CharactersAbilities> abilites;
 
 
@@ -45,6 +47,27 @@ public class Characters {
 
     public void setClazz(String clazz) {
         this.clazz = clazz;
+    }
+
+
+    @Basic
+    @Column(name = "iconUrl", nullable = false)
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    @Basic
+    @Column(name = "battleIconUrl", nullable = false)
+    public String getBattleIconUrl() {
+        return battleIconUrl;
+    }
+
+    public void setBattleIconUrl(String battleIconUrl) {
+        this.battleIconUrl = battleIconUrl;
     }
 
     @Override
@@ -93,28 +116,24 @@ public class Characters {
     public Characters() {
     }
 
-    public Characters(String name, String clazz, Race race) {
+    public Characters(String name, String clazz, Race race, String iconUrl, String battleIconUrl) {
         this.name = name;
         this.clazz = clazz;
         this.race = race;
-    }
-
-    public Characters(int id) {
-        this.id = id;
+        this.iconUrl = iconUrl;
+        this.battleIconUrl = battleIconUrl;
     }
 
     @Override
     public String toString() {
-        String ret="Characters{" +
+        return "Characters{" +
                 "name='" + name + '\'' +
                 ", id=" + id +
                 ", clazz='" + clazz + '\'' +
                 ", race=" + race +
-                ", abilites=";
-                for(Abilities ability:abilities){
-                    ret+=ability.toString();
-                }
-                ret+='}';
-        return ret;
+                ", iconUrl='" + iconUrl + '\'' +
+                ", battleIconUrl='" + battleIconUrl + '\'' +
+                ", abilities=" + abilities +
+                '}';
     }
 }

@@ -6,6 +6,7 @@ import javax.persistence.*;
 public class Race {
     private int id;
     private String name;
+    private String iconUrl;
 
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator = "raceSeq")
@@ -30,6 +31,15 @@ public class Race {
         this.name = name;
     }
 
+    @Column(name="iconUrl", nullable = false)
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,18 +61,19 @@ public class Race {
     }
 
     @Override
-    public String toString(){
-        return String.format("Race[id=%d,name=%s]",id,name);
+    public String toString() {
+        return "Race{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", iconUrl='" + iconUrl + '\'' +
+                '}';
     }
 
     public Race() {
     }
 
-    public Race(String name) {
+    public Race(String name, String iconUrl) {
         this.name = name;
-    }
-
-    public Race(int id) {
-        this.id = id;
+        this.iconUrl = iconUrl;
     }
 }

@@ -1,5 +1,8 @@
 package hello;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,6 +10,8 @@ import java.util.Collection;
 @Entity
 @Table(name = "users")
 public class Users {
+    public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
+
     private int id;
     private String nick;
     private String password;
@@ -15,7 +20,7 @@ public class Users {
     private double winrate;
     private int numberOfBattles;
     private int experience;
-    private String role;
+    private String[] roles;
     private Collection<Friends> friends;
     private Characters character;
     private Cities city;
@@ -50,7 +55,7 @@ public class Users {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = PASSWORD_ENCODER.encode(password);
     }
 
     @Basic
@@ -103,14 +108,13 @@ public class Users {
         this.experience = experience;
     }
 
-    @Basic
-    @Column(name = "role", nullable = false, length = 255)
-    public String getRole() {
-        return role;
+    @Column(name = "roles", nullable = false, length = 255)
+    public String[] getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(String[] roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -128,7 +132,7 @@ public class Users {
         if (nick != null ? !nick.equals(users.nick) : users.nick != null) return false;
         if (password != null ? !password.equals(users.password) : users.password != null) return false;
         if (jabber != null ? !jabber.equals(users.jabber) : users.jabber != null) return false;
-        if (role != null ? !role.equals(users.role) : users.role != null) return false;
+        if (roles != null ? !roles.equals(users.roles) : users.roles != null) return false;
 
         return true;
     }
@@ -146,7 +150,7 @@ public class Users {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + numberOfBattles;
         result = 31 * result + experience;
-        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
         return result;
     }
 
@@ -170,7 +174,7 @@ public class Users {
     }
 
     @ManyToOne
-    @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = true)
     public Cities getCity() {
         return city;
     }
@@ -192,7 +196,7 @@ public class Users {
     public Users() {
     }
 
-    public Users(String nick, String password, String jabber, int gold, double winrate, int numberOfBattles, int experience, String role, Characters character, Cities city, Army army) {
+    public Users(String nick, String password, String jabber, int gold, double winrate, int numberOfBattles, int experience, Characters character, Cities city, Army army, String... roles) {
         this.nick = nick;
         this.password = password;
         this.jabber = jabber;
@@ -200,7 +204,7 @@ public class Users {
         this.winrate = winrate;
         this.numberOfBattles = numberOfBattles;
         this.experience = experience;
-        this.role = role;
+        this.roles = roles;
         this.character = character;
         this.city = city;
         this.army = army;
@@ -222,7 +226,7 @@ public class Users {
                 ", winrate=" + winrate +
                 ", numberOfBattles=" + numberOfBattles +
                 ", experience=" + experience +
-                ", role='" + role + '\'' +
+                ", role='" + roles + '\'' +
                 //", friends=" + friends +
                 ", character=" + character +
                 ", city=" + city +

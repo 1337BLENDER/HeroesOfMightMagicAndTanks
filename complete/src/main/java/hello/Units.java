@@ -16,6 +16,8 @@ public class Units {
     private int power;
     private int hitpoints;
     private Race race;
+    private String iconUrl;
+    private String battleIconUrl;
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO,generator = "unitSeq")
@@ -119,6 +121,26 @@ public class Units {
         this.hitpoints = hitpoints;
     }
 
+    @Basic
+    @Column(name = "iconUrl", nullable = false)
+    public String getIconUrl() {
+        return iconUrl;
+    }
+
+    public void setIconUrl(String iconUrl) {
+        this.iconUrl = iconUrl;
+    }
+
+    @Basic
+    @Column(name = "battleIconUrl", nullable = false)
+    public String getBattleIconUrl() {
+        return battleIconUrl;
+    }
+
+    public void setBattleIconUrl(String battleIconUrl) {
+        this.battleIconUrl = battleIconUrl;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -168,7 +190,7 @@ public class Units {
     public Units() {
     }
 
-    public Units(String name, int speed, String type, int damage, Integer range, Integer ammo, int cost, int power, int hitpoints, Race race) {
+    public Units(String name, int speed, String type, int damage, Integer range, Integer ammo, int cost, int power, int hitpoints, Race race, String iconUrl, String battleIconUrl) {
         this.name = name;
         this.speed = speed;
         this.type = type;
@@ -179,9 +201,13 @@ public class Units {
         this.power = power;
         this.hitpoints = hitpoints;
         this.race = race;
+        this.iconUrl = iconUrl;
+        this.battleIconUrl = battleIconUrl;
     }
 
+
+
     public String toString(){
-        return String.format("Unit[id=%d,name=%s,speed=%d,type=%s,damage=%d,range=%d,ammo=%d,cost=%d,power=%d,hitpoints=%d,Race=%s]",id,name,speed,type,damage,range==null?-1:range.intValue(),ammo==null?-1:ammo.intValue(),cost,power,hitpoints,race==null?"error":race.getName());
+        return String.format("Unit[id=%d,name=%s,speed=%d,type=%s,damage=%d,range=%d,ammo=%d,cost=%d,power=%d,hitpoints=%d,Race=%s,iconUrl=%s,battleIconUrl=%s]",id,name,speed,type,damage,range==null?-1:range.intValue(),ammo==null?-1:ammo.intValue(),cost,power,hitpoints,race==null?"error":race.getName(),iconUrl,battleIconUrl);
     }
 }
