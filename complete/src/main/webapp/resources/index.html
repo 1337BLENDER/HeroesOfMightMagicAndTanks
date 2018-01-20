@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>HoMM&T</title>
+    <link type="text/css" rel="stylesheet" href="resources/css/style.css" />
+    <script type="text/javascript" src="resources/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="resources/js/underscore.js"></script>
+    <script type="text/javascript" src="resources/js/backbone.js"></script>
+    <script type="text/javascript" src="resources/js/index.js"></script>
+</head>
+<body>
+
+<div class="spec"></div>
+
+<form th:action="@{/login}" method="post">
+    <table>
+        <tbody>
+        <tr>
+            <th>
+                <label>User Name:</label>
+            </th>
+            <th>
+                <input type="text" name="username"/>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <label>Password:</label>
+            </th>
+            <th>
+                <input type="password" name="password"/>
+            </th>
+        </tr>
+        <tr>
+            <th colspan="2">
+                <div><input type="submit" value="Sign In"/></div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</form>
+
+<div id="block" class="block">
+</div>
+
+<!-- Áëîê ââîäà èìåíè ïîëüçîâàòåëÿ -->
+<script type="text/template" id="start">
+    <div class="start">
+        <div class="userplace">
+            <label for="username">Username: </label>
+            <input type="text" id="username" />
+        </div>
+        <div class="buttonplace">
+            <input type="button" value="Check" />
+        </div>
+    </div>
+</script>
+
+<!-- Áëîê îøèáêè -->
+<script type="text/template" id="error">
+    <div class="error">
+        Error. user  <%= username %> not found.
+        <a href="#!/">Go back</a>
+    </div>
+</script>
+
+<!-- Áëîê óäà÷è -->
+<script type="text/template" id="success">
+    <div class="success">
+        User <%= username %> found.
+        <a href="#!/">Go back</a>
+    </div>
+</script>
+</body>
+</html>

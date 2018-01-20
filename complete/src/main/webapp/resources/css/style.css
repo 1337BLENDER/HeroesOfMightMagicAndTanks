@@ -1,0 +1,196 @@
+mm {
+    font-size: 15px;
+    font-family: monospace;
+    color: #000000;
+}
+
+mm[title] {
+    color: #2165d3;
+}
+
+BODY {
+    background: #fbfdff;
+}
+
+mm > mm[title] {
+    color: #000000;
+    font-family: 'Times New Roman', serif;
+}
+
+.error {
+    font-size: 15px;
+    font-family: monospace;
+    color: #FF0000;
+}
+
+.spec {
+    padding: 20px;
+    background-color: #03acea;
+    background-image: linear-gradient(rgba(255, 255, 255, .2) 1px, rgba(255, 255, 255, 0) 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .2) 1px, rgba(255, 255, 255, 0) 1px);
+    background-size: 10px 10px;
+    border-radius: 5px;
+    text-align: center;
+    font: 25px/1 Georgia;
+    color: #FFF;
+}
+
+.spec:before,
+.spec:after {
+    display: inline-block;
+    padding: 3px 7px;
+    font-style: normal;
+    border: 1px dashed;
+}
+
+.spec:before {
+    content: "Лабораторная работа";
+    margin-right: 20px;
+}
+
+.spec:after {
+    content: "№4";
+    margin-left: 20px;
+}
+
+.tableR {
+    border-spacing: 10px;
+    border: 1px;
+    align-self: center;
+    margin: auto;
+}
+
+.tableR td,
+.tableR th {
+    padding: 10px;
+    border-left: 1px solid;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+    border-radius: 10px;
+}
+
+.tableR th {
+    background: #ffffff;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    border-right: 1px solid;
+    border-radius: 10px;
+}
+.p-spinner {
+    width:30px;
+    background-color: white;
+}
+#name {
+    font-size: 270%;
+}
+
+#group {
+    font-size: 150%;
+}
+
+.left {
+    float: left;
+    width: 34.5%;
+    padding-left: 3px;
+    color: #001379;
+}
+
+.Xclass {
+    margin-right: 3px;
+    background: #b5fff8;
+    color: #001379;
+}
+
+.Xclass:hover, .addButton:hover, .begin:hover{
+    background: #a5d6f3;
+}
+
+.inLeft {
+    margin-top: 5px;
+}
+
+.addButton {
+    background: #b5fff8;
+    color: #001379;
+}
+
+.slide{
+    width: 50px;
+}
+
+.pseudo {
+    visibility: hidden;
+}
+.table{
+    align-self: center;
+}
+
+.modalDialog {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 99999;
+    opacity:0;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: none;
+}
+
+.modalDialog:target {
+    opacity:1;
+    pointer-events: auto;
+}
+
+.modalDialog > div {
+    width: 400px;
+    position: relative;
+    margin: 10% auto;
+    padding: 5px 20px 13px 20px;
+    border-radius: 10px;
+    background: #fff;
+    background: -moz-linear-gradient(#fff, #999);
+    background: -webkit-linear-gradient(#fff, #999);
+    background: -o-linear-gradient(#fff, #999);
+}
+
+.close {
+    background: #606061;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    width: 24px;
+    text-decoration: none;
+    font-weight: bold;
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px;
+    border-radius: 12px;
+    -moz-box-shadow: 1px 1px 3px #000;
+    -webkit-box-shadow: 1px 1px 3px #000;
+    box-shadow: 1px 1px 3px #000;
+}
+
+.close:hover { background: #00d9ff; }
+
+.c {
+    border: 1px solid #333; /* Рамка */
+    padding: 5px 15px; /* Поля */
+    text-decoration: none; /* Убираем подчёркивание */
+    color: #000000; /* Цвет текста */
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: monospace;
+    border-spacing: 50px;
+}
+.c:hover {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    color: #2165d3
+}

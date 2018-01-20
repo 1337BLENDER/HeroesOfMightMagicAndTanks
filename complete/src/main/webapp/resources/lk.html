@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <title>LK</title>
+</head>
+<body>
+Hello, <span th:text="${#authentication.name}">user</span>.
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Log Out"/>
+</form>
+</body>
+</html>

@@ -7,6 +7,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -161,7 +164,7 @@ public class Application {
                 log.info(locations.get(i).toString());
             }
 
-            usersService.saveOrUpdate(new Users("Need to create a nick","secretPassword","jabber1",3000,50.0,20,50,characters.get(0),cities.get(0),armies.get(0),"ROLE_USER"));
+            usersService.saveOrUpdate(new Users("admin","1234","jabber1",3000,50.0,20,50,characters.get(0),cities.get(0),armies.get(0),"ROLE_USER"));
             usersService.saveOrUpdate(new Users("Really need to create a nick","1234","jabber2",5000,66.6666,15,30,characters.get(1),cities.get(1),armies.get(1),"ROLE_USER"));
 
             List<Users> users=new ArrayList<>();
@@ -184,6 +187,7 @@ public class Application {
 
             log.info("--------------------------------------");
             log.info(buildingsService.getById(1).getUnit().toString());
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
 		};
 	}
 
