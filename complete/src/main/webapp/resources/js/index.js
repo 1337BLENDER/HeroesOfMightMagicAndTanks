@@ -1,111 +1,109 @@
 $(function () {
 
+    var Leaders = Backbone.Model.extend(
+        {
+            defaults:{
+                leaders: [{name:"Leader", winrate:"100"}]
+            },
+            urlRoot:"/service/getLeaderboard",
+
+            initialize: function () {
+                var params={
+                  data:{
+                      "limit":"5"
+                  }
+                };
+                var data = this.fetch(params);
+            }
+        }
+    );
+
+    var leaders = new Leaders();
+
     var AppState = Backbone.Model.extend({
         defaults: {
-            username: "",
-            state: "start"
+            state: "description",
+            players: leaders.leaders,
+            route: window.location
         }
     });
 
     var appState = new AppState();
 
-    var UserNameModel = Backbone.Model.extend({ // Ìîäåëü ïîëüçîâàòåëÿ
-        defaults: {
-            "Name": ""
-        }
-    });
-
-    var Family = Backbone.Collection.extend({ // Êîëëåêöèÿ ïîëüçîâàòåëåé
-
-        model: UserNameModel,
-
-        checkUser: function (username) { // Ïðîâåðêà ïîëüçîâàòåëÿ
-            var findResult = this.find(function (user) { return user.get("Name") == username })
-            return findResult != null;
-        }
-
-    });
-
-    var MyFamily = new Family([ // Ìîÿ ñåìüÿ
-        {Name: "admin" },
-        { Name: "user" },
-        { Name: "kekLol" },
-
-    ]);
-
-
-
     var Controller = Backbone.Router.extend({
         routes: {
-            "": "start", // Ïóñòîé hash-òýã
-            "!/": "start", // Íà÷àëüíàÿ ñòðàíèöà
-            "!/success": "success", // Áëîê óäà÷è
-            "!/error": "error" // Áëîê îøèáêè
+            "": "description",
+            "!/": "description",
+            "!/leaders": "leaderboard"
         },
 
-        start: function () {
-            appState.set({ state: "start" });
+        description: function () {
+            appState.set({ state: "description" });
         },
 
-        success: function () {
-            appState.set({ state: "success" });
-        },
-
-        error: function () {
-            appState.set({ state: "error" });
+        leaderboard: function () {
+            appState.set({ state: "leaders" });
         }
     });
 
-    var controller = new Controller(); // Ñîçäà¸ì êîíòðîëëåð
+    var controller = new Controller();
 
 
     var Block = Backbone.View.extend({
-        el: $("#block"), // DOM ýëåìåíò widget'à
+        el: $("#block"),
 
-        templates: { // Øàáëîíû íà ðàçíîå ñîñòîÿíèå
-            "start": _.template($('#start').html()),
-            "success": _.template($('#success').html()),
-            "error": _.template($('#error').html())
+        templates: {
+            "description": _.template($('#description').html()),
+            "leaders": _.template($('#leaderboard').html())
         },
 
         events: {
-            "click input:button": "check" // Îáðàáîò÷èê êëèêà íà êíîïêå "Ïðîâåðèòü"
+            "click input#descr": "setDescr",
+            "click input#lead": "setLead",
+            "click input#reg": "goToRegistration"
         },
 
-        initialize: function () { // Ïîäïèñêà íà ñîáûòèå ìîäåëè
+        initialize: function () {
             this.model.bind('change', this.render, this);
         },
 
-        check: function () {
-            var username = $(this.el).find("input:text").val();
-            var find = MyFamily.checkUser(username); // Ïðîâåðêà èìåíè ïîëüçîâàòåëÿ
-            appState.set({ // Ñîõðàíåíèå èìåíè ïîëüçîâàòåëÿ è ñîñòîÿíèÿ
-                "state": find ? "success" : "error",
-                "username": username
+        setDescr: function () {
+            appState.set({
+                "state": "description"
             });
+        },
+
+        setLead: function () {
+            appState.set({
+                "state": "leaders"
+            });
+        },
+
+        goToRegistration: function () {
+            window.location.hash="";
+            window.location.pathname+="registration";
         },
 
         render: function () {
             var state = this.model.get("state");
-            $(this.el).html(this.templates[state](this.model.toJSON()));
+            $(this.el).find("#content").html(this.templates[state](this.model.toJSON()));
             return this;
         }
     });
 
-    var block = new Block({ model: appState }); // ñîçäàäèì îáúåêò
+    var block = new Block({ model: appState });
 
-    appState.trigger("change"); // Âûçîâåì ñîáûòèå change ó ìîäåëè
+    appState.trigger("change");
 
-    appState.bind("change:state", function () { // ïîäïèñêà íà ñìåíó ñîñòîÿíèÿ äëÿ êîíòðîëëåðà
+    appState.bind("change:state", function () {
         var state = this.get("state");
-        if (state == "start")
-            controller.navigate("!/", false); // false ïîòîìó, ÷òî íàì íå íàäî
-                                              // âûçûâàòü îáðàáîò÷èê ó Router
+        if (state == "description")
+            controller.navigate("!/", false);
         else
             controller.navigate("!/" + state, false);
     });
 
-    Backbone.history.start();  // Çàïóñêàåì HTML5 History push
+    Backbone.history.start();
 
 
 });

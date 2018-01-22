@@ -44,12 +44,12 @@ mm > mm[title] {
 }
 
 .spec:before {
-    content: "Лабораторная работа";
+    content: "Курсовая";
     margin-right: 20px;
 }
 
 .spec:after {
-    content: "№4";
+    content: "работа";
     margin-left: 20px;
 }
 
@@ -124,6 +124,12 @@ mm > mm[title] {
 }
 .table{
     align-self: center;
+}
+
+.bordered{
+    border: 1px solid black;
+    border-radius: 10px;
+    border-spacing: 10px;
 }
 
 .modalDialog {

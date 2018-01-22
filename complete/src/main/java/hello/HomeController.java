@@ -21,6 +21,11 @@ public class HomeController {
         return new ModelAndView("/resources/index.html");
     }
 
+    @RequestMapping(value = "/registration")
+    public ModelAndView registration(Locale locale,Model model) {
+        return new ModelAndView("/resources/registration.html");
+    }
+
     @RequestMapping(value = "/login")
     public ModelAndView login() {
         return new ModelAndView("/resources/index.html");

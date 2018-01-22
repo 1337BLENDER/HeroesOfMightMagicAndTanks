@@ -42,34 +42,56 @@
 </form>
 
 <div id="block" class="block">
+    <table>
+        <tbody>
+            <tr>
+                <td>
+                    <input id="descr" type="button" value="Описание"/>
+                </td>
+                <td>
+                    <input id="lead" type="button" value="Лидеры"/>
+                </td>
+                <td>
+                    <input id="reg" type="button" value="Регистрация"/>
+                </td>
+            </tr>
+            <tr>
+                <div id="content" class="content"></div>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
-<!-- Áëîê ââîäà èìåíè ïîëüçîâàòåëÿ -->
-<script type="text/template" id="start">
-    <div class="start">
-        <div class="userplace">
-            <label for="username">Username: </label>
-            <input type="text" id="username" />
-        </div>
-        <div class="buttonplace">
-            <input type="button" value="Check" />
+<script type="text/template" id="description">
+    <div class="description">
+        <div class="bordered">
+            <p>
+                Представь себе что здесь топовое описание самой лучшей в мире игры (на самом деле это не так)
+            </p>
         </div>
     </div>
 </script>
 
-<!-- Áëîê îøèáêè -->
-<script type="text/template" id="error">
-    <div class="error">
-        Error. user  <%= username %> not found.
-        <a href="#!/">Go back</a>
-    </div>
-</script>
 
-<!-- Áëîê óäà÷è -->
-<script type="text/template" id="success">
-    <div class="success">
-        User <%= username %> found.
-        <a href="#!/">Go back</a>
+<script type="text/template" id="leaderboard">
+    <div class="leaderboard">
+        <p class="bordered">
+            Лучшие игроки
+        </p>
+        <div class="bordered">
+            <table class="tableR">
+                <tbody>
+                    <tr>
+                        <td>Место</td>
+                        <td>Ник</td>
+                        <td>Процент побед</td>
+                    </tr>
+                    <% players.forEach(function(item,i,arr){print('<tr><td>'+i+'</td><td>'+item.name+'</td><td>'+item.winrate+'</td></tr>')})%>
+                </tbody>
+            </table>
+
+
+        </div>
     </div>
 </script>
 </body>

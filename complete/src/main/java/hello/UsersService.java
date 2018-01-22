@@ -2,6 +2,7 @@ package hello;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,29 @@ public class UsersService {
         Hibernate.initialize(user.getCity().getBuildings());
         Hibernate.initialize(user.getFriends());
         return user;
+    }
+
+    public Leader[] getLeaderboard(int limit){
+        Leader[] leaders=new Leader[limit];
+        Leader tempLeader;
+        int i=0;
+        loop:
+        for(Users user:userRepository.findAllByOrderByWinrate()){
+            Hibernate.initialize(user.getArmy());
+            Hibernate.initialize(user.getArmy().getUnits());
+            Hibernate.initialize(user.getCharacter());
+            Hibernate.initialize(user.getCharacter().getAbilities());
+            Hibernate.initialize(user.getCity());
+            Hibernate.initialize(user.getCity().getBuildings());
+            Hibernate.initialize(user.getFriends());
+            tempLeader=new Leader(user.getNick(),user.getWinrate());
+            leaders[i]=tempLeader;
+            i++;
+            if(i==limit){
+                break loop;
+            }
+        }
+        return leaders;
     }
 
     /**

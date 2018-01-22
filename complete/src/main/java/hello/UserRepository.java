@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends CrudRepository<Users,Integer> {
     Users findByNick(String name);
     void deleteByNick(String name);
+    Iterable<Users> findAllByOrderByWinrate();
 }
