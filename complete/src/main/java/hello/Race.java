@@ -4,14 +4,14 @@ import javax.persistence.*;
 @Entity
 @Table(name = "race")
 public class Race {
-    private int id;
-    private String name;
-    private String iconUrl;
 
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator = "raceSeq")
     @SequenceGenerator(name = "raceSeq",sequenceName = "raceSeq")
     @Column(name = "id", nullable = false)
+    private int id;
+    private String name;
+    private String iconUrl;
 
     public int getId() {
         return id;

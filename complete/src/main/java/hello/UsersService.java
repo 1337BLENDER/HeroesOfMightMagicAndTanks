@@ -6,16 +6,35 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Service
 @Transactional
 public class UsersService {
 
     private UserRepository userRepository;
+//    private AppUserRepository appUserRepository;
 
     @Autowired
-    public UsersService (UserRepository userRepository){this.userRepository=userRepository;}
+    public UsersService(UserRepository userRepository/*, AppUserRepository appUserRepository*/) {
+        this.userRepository = userRepository;
+  //      this.appUserRepository = appUserRepository;
+    }
+
     public UsersService(){}
+
+    private void init(Users user){
+        Hibernate.initialize(user.getArmy());
+        Hibernate.initialize(user.getArmy().getUnits());
+        Hibernate.initialize(user.getCharacter());
+        Hibernate.initialize(user.getCharacter().getAbilities());
+        Hibernate.initialize(user.getFriends());
+        //Hibernate.initialize(user.getAppUser());
+        //Hibernate.initialize(user.getCity());
+        //Hibernate.initialize(user.getCity().getBuildings());
+    }
 
     /**Find and return one user with given id
      * @param id of required user
@@ -24,37 +43,31 @@ public class UsersService {
 
     public Users getById (int id){
         Users user = userRepository.findOne(id);
-        Hibernate.initialize(user.getArmy());
-        Hibernate.initialize(user.getArmy().getUnits());
-        Hibernate.initialize(user.getCharacter());
-        Hibernate.initialize(user.getCharacter().getAbilities());
-        Hibernate.initialize(user.getCity());
-        Hibernate.initialize(user.getCity().getBuildings());
-        Hibernate.initialize(user.getFriends());
+        init(user);
         return user;
     }
 
     public Leader[] getLeaderboard(int limit){
-        Leader[] leaders=new Leader[limit];
+        List<Leader> leaders= new ArrayList<>();
         Leader tempLeader;
         int i=0;
         loop:
-        for(Users user:userRepository.findAllByOrderByWinrate()){
-            Hibernate.initialize(user.getArmy());
-            Hibernate.initialize(user.getArmy().getUnits());
-            Hibernate.initialize(user.getCharacter());
-            Hibernate.initialize(user.getCharacter().getAbilities());
-            Hibernate.initialize(user.getCity());
-            Hibernate.initialize(user.getCity().getBuildings());
-            Hibernate.initialize(user.getFriends());
+        for(Users user:userRepository.findAllByOrderByWinrateDesc()){
+            init(user);
             tempLeader=new Leader(user.getNick(),user.getWinrate());
-            leaders[i]=tempLeader;
+            leaders.add(tempLeader);
             i++;
             if(i==limit){
                 break loop;
             }
         }
-        return leaders;
+        Leader[] leaderArray=new Leader[leaders.size()];
+        i=0;
+        for(Leader leader:leaders){
+            leaderArray[i]=leader;
+            i++;
+        }
+        return leaderArray;
     }
 
     /**
@@ -65,13 +78,7 @@ public class UsersService {
 
     public Users getByNick (String nick){
         Users user = userRepository.findByNick(nick);
-        Hibernate.initialize(user.getArmy());
-        Hibernate.initialize(user.getArmy().getUnits());
-        Hibernate.initialize(user.getCharacter());
-        Hibernate.initialize(user.getCharacter().getAbilities());
-        Hibernate.initialize(user.getCity());
-        Hibernate.initialize(user.getCity().getBuildings());
-        Hibernate.initialize(user.getFriends());
+        init(user);
         return user;
     }
 
@@ -83,13 +90,7 @@ public class UsersService {
     public Iterable<Users> getAll(){
         Iterable<Users> users = userRepository.findAll();
         for(Users user: users){
-            Hibernate.initialize(user.getArmy());
-            Hibernate.initialize(user.getArmy().getUnits());
-            Hibernate.initialize(user.getCharacter());
-            Hibernate.initialize(user.getCharacter().getAbilities());
-            Hibernate.initialize(user.getCity());
-            Hibernate.initialize(user.getCity().getBuildings());
-            Hibernate.initialize(user.getFriends());
+            init(user);
         }
         return users;
     }
@@ -100,7 +101,9 @@ public class UsersService {
      * @return saved user
      */
 
-    public Users saveOrUpdate(Users user){return userRepository.save(user);}
+    public Users saveOrUpdate(Users user){
+        return userRepository.save(user);
+    }
 
     /**
      * Remove user with given id

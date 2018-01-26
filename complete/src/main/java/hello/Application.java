@@ -12,9 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @SpringBootApplication
 @EnableJpaRepositories
@@ -27,7 +25,7 @@ public class Application {
 	}
 
 	@Bean
-	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService, FriendsService friendsService ) {
+	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService, FriendsService friendsService, RoleRepository roleRepository, AppUserRepository appUserRepository ) {
 		return (args) -> {
 			raceService.saveOrUpdate(new Race("Эльфы","/icons/races/elf.jpg"));
             raceService.saveOrUpdate(new Race("Орки","/icons/races/orc.jpg"));
@@ -85,20 +83,30 @@ public class Application {
                 log.info(city.toString());
             }
 
-            charactersService.saveOrUpdate(new Characters("Леголас","Лучник",races.get(1),"icons/characters/legolas.jpg","icons/characters/battle_legolas.jpg"));
-            charactersService.saveOrUpdate(new Characters("Саурон","Маг",races.get(0),"icons/characters/sauron.jpg","icons/characters/battle_sauron.jpg"));
+            Characters char1=new Characters("Леголас","Лучник",races.get(1),"icons/characters/legolas.jpg","icons/characters/battle_legolas.jpg");
+            char1.addAbility(new Abilities("Выстрел","нанесение урона",0,2,50));
+            char1.addAbility(new Abilities("Мощный выстрел","нанесение урона",3,4,150));
+            char1.addAbility(new Abilities("Меткий выстрел","нанесение урона",9,7,500));
+
+            Characters char2=new Characters("Саурон","Маг",races.get(0),"icons/characters/sauron.jpg","icons/characters/battle_sauron.jpg");
+            char2.addAbility(new Abilities("Удар","нанесение урона",0,2,60));
+            char2.addAbility(new Abilities("Удар Дубиной","нанесение урона",3,5,200));
+            char2.addAbility(new Abilities("Сокрушающий удар","нанесение урона",9,9,630));
+
+            charactersService.saveOrUpdate(char1);
+            charactersService.saveOrUpdate(char2);
 
             List<Characters> characters = new ArrayList<>();
             for(Characters character:charactersService.getAll()){
                 characters.add(character);
             }
 
-            abilitiesService.saveOrUpdate(new Abilities("Выстрел","нанесение урона",0,2,50,characters.get(0)));
-            abilitiesService.saveOrUpdate(new Abilities("Мощный выстрел","нанесение урона",3,4,150,characters.get(0)));
-            abilitiesService.saveOrUpdate(new Abilities("Меткий выстрел","нанесение урона",9,7,500,characters.get(0)));
-            abilitiesService.saveOrUpdate(new Abilities("Удар","нанесение урона",0,2,60,characters.get(1)));
-            abilitiesService.saveOrUpdate(new Abilities("Удар Дубиной","нанесение урона",3,5,200,characters.get(1)));
-            abilitiesService.saveOrUpdate(new Abilities("Сокрушающий удар","нанесение урона",9,9,630,characters.get(1)));
+            //abilitiesService.saveOrUpdate();
+            //abilitiesService.saveOrUpdate();
+            //abilitiesService.saveOrUpdate();
+            //abilitiesService.saveOrUpdate();
+            //abilitiesService.saveOrUpdate(new Abilities("Удар Дубиной","нанесение урона",3,5,200));
+            //abilitiesService.saveOrUpdate();
 
             List<Abilities> abilities = new ArrayList<>();
             for(Abilities ability: abilitiesService.getAll()){
@@ -115,7 +123,6 @@ public class Application {
             for(Characters character:charactersService.getAll()){
                 log.info(character.toString());
             }
-            log.info(charactersService.getByName("Леголас").toString());
 
             armyService.saveOrUpdate(new Army());
             armyService.saveOrUpdate(new Army());
@@ -166,8 +173,14 @@ public class Application {
                 log.info(locations.get(i).toString());
             }
 
-            usersService.saveOrUpdate(new Users("admin","1234","jabber1",3000,50.0,20,50,characters.get(0),cities.get(0),armies.get(0),"ROLE_USER"));
-            usersService.saveOrUpdate(new Users("Really need to create a nick","1234","jabber2",5000,66.6666,15,30,characters.get(1),cities.get(1),armies.get(1),"ROLE_USER"));
+
+            Users userszzz=new Users("admin","1234","jabber1",50.0,20,characters.get(0),armies.get(0));
+
+
+            System.out.println(userszzz);
+            usersService.saveOrUpdate(userszzz);
+            //SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
+            usersService.saveOrUpdate(new Users("Really need to create a nick","1234","jabber2",66.6666,15,characters.get(1),armies.get(1)));
 
             List<Users> users=new ArrayList<>();
 
@@ -189,6 +202,8 @@ public class Application {
 
             log.info("--------------------------------------");
             log.info(buildingsService.getById(1).getUnit().toString());
+
+            appUserRepository.save(new AppUser("admin","1234","ROLE_USER"));
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
 		};
 	}

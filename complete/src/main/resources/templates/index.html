@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>HoMM&T</title>
-    <link type="text/css" rel="stylesheet" href="resources/css/style.css" />
-    <script type="text/javascript" src="resources/js/jquery-3.2.1.js"></script>
-    <script type="text/javascript" src="resources/js/underscore.js"></script>
-    <script type="text/javascript" src="resources/js/backbone.js"></script>
-    <script type="text/javascript" src="resources/js/index.js"></script>
+    <meta charset="UTF-8"/>
+    <title>HoMMT</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+    <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="/js/underscore.js"></script>
+    <script type="text/javascript" src="/js/backbone.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>
 </head>
 <body>
 
@@ -18,18 +18,18 @@
         <tbody>
         <tr>
             <th>
-                <label>User Name:</label>
+                <label for="nick">User Name:</label>
             </th>
             <th>
-                <input type="text" name="username"/>
+                <input id="nick" type="text" name="nick"/>
             </th>
         </tr>
         <tr>
             <th>
-                <label>Password:</label>
+                <label for="password">Password:</label>
             </th>
             <th>
-                <input type="password" name="password"/>
+                <input id="password" type="password" name="password"/>
             </th>
         </tr>
         <tr>
@@ -74,6 +74,8 @@
 
 
 <script type="text/template" id="leaderboard">
+    <![CDATA[
+    <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
     <div class="leaderboard">
         <p class="bordered">
             Лучшие игроки
@@ -86,13 +88,14 @@
                         <td>Ник</td>
                         <td>Процент побед</td>
                     </tr>
-                    <% players.forEach(function(item,i,arr){print('<tr><td>'+i+'</td><td>'+item.name+'</td><td>'+item.winrate+'</td></tr>')})%>
+                    <% players.forEach(function(item,i,arr){print('<tr><td>'+(i+1)+'</td><td>'+item.name+'</td><td>'+item.winrate+'</td></tr>')})%>
                 </tbody>
             </table>
 
 
         </div>
     </div>
+    <!-- ]]> -->
 </script>
 </body>
 </html>

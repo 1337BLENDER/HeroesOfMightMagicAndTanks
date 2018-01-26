@@ -1,10 +1,16 @@
 package hello;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "abilities")
 public class Abilities {
+    @Id
+    @GeneratedValue(strategy=GenerationType.TABLE, generator = "abilities_id_seq")
+    @SequenceGenerator(name="abilities_id_seq",sequenceName = "abilities_id_seq")
+    @Column(name = "id", nullable = false)
     private int id;
     private String name;
     private String type;
@@ -12,10 +18,6 @@ public class Abilities {
     private int manaPoints;
     private int damage;
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.TABLE, generator = "abilities_id_seq")
-    @SequenceGenerator(name="abilities_id_seq",sequenceName = "abilities_id_seq")
-    @Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -74,18 +76,6 @@ public class Abilities {
         this.damage = damage;
     }
 
-    private Characters character = new Characters();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "character_id", referencedColumnName = "id", nullable = false)
-    public Characters getCharacter() {
-        return character;
-    }
-
-    public void setCharacter(Characters character) {
-        this.character = character;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,15 +113,6 @@ public class Abilities {
         this.level = level;
         this.manaPoints = manaPoints;
         this.damage = damage;
-    }
-
-    public Abilities(String name, String type, int level, int manaPoints, int damage, Characters character) {
-        this.name = name;
-        this.type = type;
-        this.level = level;
-        this.manaPoints = manaPoints;
-        this.damage = damage;
-        this.character = character;
     }
 
     public Abilities(int id) {

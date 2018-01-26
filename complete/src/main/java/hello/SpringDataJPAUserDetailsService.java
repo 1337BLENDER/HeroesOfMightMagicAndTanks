@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SpringDataJPAUserDetailsService implements UserDetailsService {
-    private final UserRepository repository;
+    private final AppUserRepository repository;
 
     @Autowired
-    SpringDataJPAUserDetailsService(UserRepository repository){
+    SpringDataJPAUserDetailsService(AppUserRepository repository){
         this.repository=repository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException{
-        Users user = this.repository.findByNick(name);
+        AppUser user = this.repository.findByName(name);
         if(user == null)
-            throw new UsernameNotFoundException("Username not found");
-        return new User(user.getNick(),user.getPassword(), AuthorityUtils.createAuthorityList(user.getRoles()));
+            throw new UsernameNotFoundException(name);
+        return new User(user.getName(),user.getPassword(), AuthorityUtils.createAuthorityList(user.getRoles()));
     }
 }

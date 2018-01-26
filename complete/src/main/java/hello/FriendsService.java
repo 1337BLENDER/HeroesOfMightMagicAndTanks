@@ -17,18 +17,22 @@ public class FriendsService {
     private void init(Friends friend){
         Hibernate.initialize(friend.getUser1());
         Hibernate.initialize(friend.getUser2());
-        Hibernate.initialize(friend.getUser1().getCity());
-        Hibernate.initialize(friend.getUser2().getCity());
+        //Hibernate.initialize(friend.getUser1().getCity());
+        //Hibernate.initialize(friend.getUser2().getCity());
         Hibernate.initialize(friend.getUser1().getCharacter());
         Hibernate.initialize(friend.getUser2().getCharacter());
         Hibernate.initialize(friend.getUser1().getArmy());
         Hibernate.initialize(friend.getUser2().getArmy());
-        Hibernate.initialize(friend.getUser1().getCity().getBuildings());
-        Hibernate.initialize(friend.getUser2().getCity().getBuildings());
+        //Hibernate.initialize(friend.getUser1().getCity().getBuildings());
+        //Hibernate.initialize(friend.getUser2().getCity().getBuildings());
         Hibernate.initialize(friend.getUser1().getArmy().getUnits());
         Hibernate.initialize(friend.getUser2().getArmy().getUnits());
         Hibernate.initialize(friend.getUser1().getCharacter().getAbilities());
         Hibernate.initialize(friend.getUser2().getCharacter().getAbilities());
+//        Hibernate.initialize(friend.getUser1().getRoles());
+  //      Hibernate.initialize(friend.getUser2().getRoles());
+        //Hibernate.initialize(friend.getUser1().getAppUser());
+        //Hibernate.initialize(friend.getUser2().getAppUser());
     }
 
     /**Find and return one friends entity with given id

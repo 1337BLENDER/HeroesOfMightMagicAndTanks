@@ -1,20 +1,18 @@
 $(function () {
 
-    var Leaders = Backbone.Model.extend(
+    var Leader = Backbone.Model.extend(
         {
             defaults:{
-                leaders: [{name:"Leader", winrate:"100"}]
-            },
-            urlRoot:"/service/getLeaderboard",
-
-            initialize: function () {
-                var params={
-                  data:{
-                      "limit":"5"
-                  }
-                };
-                var data = this.fetch(params);
+                name: "leader",
+                winrate: "100"
             }
+        }
+    );
+
+    var Leaders = Backbone.Collection.extend({
+            model: Leader,
+            url: "/service/getLeaderboard",
+            defaults: [{name:"name",winrate:"2"},{name:"name",winrate:"2"}]
         }
     );
 
@@ -23,7 +21,7 @@ $(function () {
     var AppState = Backbone.Model.extend({
         defaults: {
             state: "description",
-            players: leaders.leaders,
+            players: [{name:"Adam", winrate:"100"},{name:"sdsd", winrate:"234"}],
             route: window.location
         }
     });
@@ -74,9 +72,18 @@ $(function () {
         },
 
         setLead: function () {
-            appState.set({
-                "state": "leaders"
-            });
+            var params={
+                data:{
+                    limit: "5"
+                },
+                success:function () {
+                    appState.set({
+                        "players": leaders.toJSON(),
+                        "state": "leaders"
+                    });
+                }
+            };
+            leaders.fetch(params);
         },
 
         goToRegistration: function () {

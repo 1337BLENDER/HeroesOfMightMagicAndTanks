@@ -1,11 +1,15 @@
 package hello;
 
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -13,18 +17,22 @@ public class Users {
     public static final PasswordEncoder PASSWORD_ENCODER = new BCryptPasswordEncoder();
 
     private int id;
+    @NotEmpty(message = "*Пожалуйста введите свой ник")
+    @Length(min=3,message = "*Ник должен содержать как минимум 3 символа")
     private String nick;
+    @NotEmpty(message = "*Пожалуйста введите свой пароль")
+    @Length(min=3,message = "*Пароль должен содержать как минимум 3 символа")
     private String password;
     private String jabber;
-    private int gold;
+//    private int gold;
     private double winrate;
     private int numberOfBattles;
-    private int experience;
-    private String[] roles;
+//    private int experience;
     private Collection<Friends> friends;
     private Characters character;
-    private Cities city;
+//    private Cities city;
     private Army army;
+//    private AppUser appUser;
 
     @Id
     @GeneratedValue(strategy=GenerationType.TABLE,generator = "userSeq")
@@ -39,7 +47,7 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "nick", nullable = false, length = 255)
+    @Column(name = "nick",nullable = false, length = 255, unique = true)
     public String getNick() {
         return nick;
     }
@@ -48,8 +56,8 @@ public class Users {
         this.nick = nick;
     }
 
-    @Basic
-    @Column(name = "password", nullable = false, length = 255)
+
+    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -67,9 +75,9 @@ public class Users {
     public void setJabber(String jabber) {
         this.jabber = jabber;
     }
-
+/*
     @Basic
-    @Column(name = "gold", nullable = false)
+    @Column(name = "gold", nullable = true)
     public int getGold() {
         return gold;
     }
@@ -77,7 +85,7 @@ public class Users {
     public void setGold(int gold) {
         this.gold = gold;
     }
-
+*/
     @Basic
     @Column(name = "winrate", nullable = false, precision = 2)
     public double getWinrate() {
@@ -97,9 +105,9 @@ public class Users {
     public void setNumberOfBattles(int numberOfBattles) {
         this.numberOfBattles = numberOfBattles;
     }
-
+/*
     @Basic
-    @Column(name = "experience", nullable = false)
+    @Column(name = "experience", nullable = true)
     public int getExperience() {
         return experience;
     }
@@ -107,34 +115,28 @@ public class Users {
     public void setExperience(int experience) {
         this.experience = experience;
     }
-
-    @Column(name = "roles", nullable = false, length = 255)
-    public String[] getRoles() {
-        return roles;
-    }
-
-    public void setRoles(String[] roles) {
-        this.roles = roles;
-    }
-
+*/
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof Users)) return false;
 
         Users users = (Users) o;
 
         if (id != users.id) return false;
-        if (gold != users.gold) return false;
+  //      if (gold != users.gold) return false;
         if (Double.compare(users.winrate, winrate) != 0) return false;
         if (numberOfBattles != users.numberOfBattles) return false;
-        if (experience != users.experience) return false;
-        if (nick != null ? !nick.equals(users.nick) : users.nick != null) return false;
-        if (password != null ? !password.equals(users.password) : users.password != null) return false;
-        if (jabber != null ? !jabber.equals(users.jabber) : users.jabber != null) return false;
-        if (roles != null ? !roles.equals(users.roles) : users.roles != null) return false;
-
+    //    if (experience != users.experience) return false;
+        if (!nick.equals(users.nick)) return false;
+        if (!password.equals(users.password)) return false;
+        if (!jabber.equals(users.jabber)) return false;
+        if (friends != null ? !friends.equals(users.friends) : users.friends != null) return false;
+        if (!character.equals(users.character)) return false;
+      //  if (city != null ? !city.equals(users.city) : users.city != null) return false;
+        if (army != null ? !army.equals(users.army) : users.army != null) return false;
         return true;
+        //return appUser != null ? appUser.equals(users.appUser) : users.appUser == null;
     }
 
     @Override
@@ -142,15 +144,19 @@ public class Users {
         int result;
         long temp;
         result = id;
-        result = 31 * result + (nick != null ? nick.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
-        result = 31 * result + (jabber != null ? jabber.hashCode() : 0);
-        result = 31 * result + gold;
+        result = 31 * result + nick.hashCode();
+        result = 31 * result + password.hashCode();
+        result = 31 * result + jabber.hashCode();
+        //result = 31 * result + gold;
         temp = Double.doubleToLongBits(winrate);
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         result = 31 * result + numberOfBattles;
-        result = 31 * result + experience;
-        result = 31 * result + (roles != null ? roles.hashCode() : 0);
+        //result = 31 * result + experience;
+        result = 31 * result + (friends != null ? friends.hashCode() : 0);
+        result = 31 * result + character.hashCode();
+        //result = 31 * result + (city != null ? city.hashCode() : 0);
+        result = 31 * result + (army != null ? army.hashCode() : 0);
+        //result = 31 * result + (appUser != null ? appUser.hashCode() : 0);
         return result;
     }
 
@@ -172,7 +178,7 @@ public class Users {
     public void setCharacter(Characters character) {
         this.character = character;
     }
-
+/*
     @ManyToOne
     @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = true)
     public Cities getCity() {
@@ -182,7 +188,17 @@ public class Users {
     public void setCity(Cities city) {
         this.city = city;
     }
+/*
+    @OneToOne
+    @JoinColumn(name = "app_user_id")
+    public AppUser getAppUser() {
+        return appUser;
+    }
 
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+*/
     @ManyToOne
     @JoinColumn(name = "army_id", referencedColumnName = "id", nullable = false)
     public Army getArmy() {
@@ -196,19 +212,38 @@ public class Users {
     public Users() {
     }
 
-    public Users(String nick, String password, String jabber, int gold, double winrate, int numberOfBattles, int experience, Characters character, Cities city, Army army, String... roles) {
+    public Users(String nick, String password, String jabber, int gold, double winrate, int numberOfBattles, int experience, Characters character, Cities city, Army army) {
         this.nick = nick;
         this.password = password;
         this.jabber = jabber;
-        this.gold = gold;
+  //      this.gold = gold;
         this.winrate = winrate;
         this.numberOfBattles = numberOfBattles;
-        this.experience = experience;
-        this.roles = roles;
+    //    this.experience = experience;
         this.character = character;
-        this.city = city;
+      //  this.city = city;
         this.army = army;
-        this.friends=new ArrayList<>();
+    }
+
+    public Users(String nick, String password, String jabber, double winrate, int numberOfBattles, Characters character, Army army) {
+        this.nick = nick;
+        this.password = password;
+        this.jabber = jabber;
+        this.winrate = winrate;
+        this.numberOfBattles = numberOfBattles;
+        this.character = character;
+        this.army = army;
+    }
+
+    public Users(String nick, String password, String jabber, double winrate, int numberOfBattles, Characters character, Army army, AppUser appUser) {
+        this.nick = nick;
+        this.password = password;
+        this.jabber = jabber;
+        this.winrate = winrate;
+        this.numberOfBattles = numberOfBattles;
+        this.character = character;
+        this.army = army;
+  //      this.appUser = appUser;
     }
 
     public Users(int id) {
@@ -222,14 +257,10 @@ public class Users {
                 ", nick='" + nick + '\'' +
                 ", password='" + password + '\'' +
                 ", jabber='" + jabber + '\'' +
-                ", gold=" + gold +
                 ", winrate=" + winrate +
                 ", numberOfBattles=" + numberOfBattles +
-                ", experience=" + experience +
-                ", role='" + roles + '\'' +
-                //", friends=" + friends +
+//                ", appUser=" + appUser +
                 ", character=" + character +
-                ", city=" + city +
                 ", army=" + army +
                 '}';
     }

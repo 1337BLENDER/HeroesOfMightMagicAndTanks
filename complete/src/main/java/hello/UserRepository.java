@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends CrudRepository<Users,Integer> {
-    Users findByNick(String name);
-    void deleteByNick(String name);
-    Iterable<Users> findAllByOrderByWinrate();
+    Users findByNick(String nick);
+    void deleteByNick(String nick);
+    Iterable<Users> findAllByOrderByWinrateDesc();
 }

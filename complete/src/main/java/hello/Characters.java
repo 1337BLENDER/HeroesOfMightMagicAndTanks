@@ -1,16 +1,20 @@
 package hello;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "characters")
 public class Characters {
     private String name;
+    @Id
+    @GeneratedValue(strategy=GenerationType.TABLE,generator = "charSeq")
+    @SequenceGenerator(name="charSeq",sequenceName = "charSeq")
+    @Column(name = "id", nullable = false)
     private int id;
     private String clazz;
+    @ManyToOne(targetEntity = Race.class)
+    @JoinColumn(name = "race_id", referencedColumnName = "id", nullable = false)
     private Race race;
     private String iconUrl;//маленькая иконка(можно верезать из большой)
     private String battleIconUrl;//вид в бою (большая картинка во весь рост)
@@ -27,10 +31,6 @@ public class Characters {
         this.name = name;
     }
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator = "charSeq")
-    @SequenceGenerator(name="charSeq",sequenceName = "charSeq")
-    @Column(name = "id", nullable = false)
     public int getId() {
         return id;
     }
@@ -92,8 +92,7 @@ public class Characters {
         return result;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "race_id", referencedColumnName = "id", nullable = false)
+
     public Race getRace() {
         return race;
     }
@@ -102,16 +101,19 @@ public class Characters {
         this.race = race;
     }
 
-    private Set<Abilities> abilities=new HashSet<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, targetEntity = Abilities.class)
+    @JoinTable(name = "character_abilities", joinColumns = @JoinColumn(name="character_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ability_id", referencedColumnName = "id"))
+    private List<Abilities> abilities=new ArrayList<>();
 
-    @OneToMany(mappedBy = "character", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    public Set<Abilities> getAbilities() {
+    public List<Abilities> getAbilities() {
         return abilities;
     }
 
-    public void setAbilities(Set<Abilities> abilities) {
+    public void setAbilities(List<Abilities> abilities) {
         this.abilities = abilities;
     }
+
+    public void addAbility(Abilities ability){this.abilities.add(ability);}
 
     public Characters() {
     }

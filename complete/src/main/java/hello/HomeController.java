@@ -10,7 +10,7 @@ import java.util.Locale;
 
 @Controller
 public class HomeController {
-
+/*
     @RequestMapping("/lk")
     public String main() {
         return "lk";
@@ -30,5 +30,23 @@ public class HomeController {
     public ModelAndView login() {
         return new ModelAndView("/resources/index.html");
     }
+*/
 
+    @RequestMapping("/")
+    public String home(){
+        return "index";
+    }
+
+    @RequestMapping("/login")
+    public String login(){
+        return "index";
+    }
+
+    @RequestMapping("/registration")
+    public String registration(){
+        return "registration";
+    }
+
+    @RequestMapping("/lk")
+    public String lk(){return "lk";}
 }
