@@ -15,12 +15,12 @@ import java.util.List;
 public class UsersService {
 
     private UserRepository userRepository;
-//    private AppUserRepository appUserRepository;
+    private AppUserRepository appUserRepository;
 
     @Autowired
-    public UsersService(UserRepository userRepository/*, AppUserRepository appUserRepository*/) {
+    public UsersService(UserRepository userRepository, AppUserRepository appUserRepository) {
         this.userRepository = userRepository;
-  //      this.appUserRepository = appUserRepository;
+        this.appUserRepository = appUserRepository;
     }
 
     public UsersService(){}
@@ -102,6 +102,8 @@ public class UsersService {
      */
 
     public Users saveOrUpdate(Users user){
+        AppUser appUser=new AppUser(user.getNick(),user.getPassword(),"ROLE_USER");
+        appUserRepository.save(appUser);
         return userRepository.save(user);
     }
 

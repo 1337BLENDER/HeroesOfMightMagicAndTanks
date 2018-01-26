@@ -173,14 +173,11 @@ public class Application {
                 log.info(locations.get(i).toString());
             }
 
-
             Users userszzz=new Users("admin","1234","jabber1",50.0,20,characters.get(0),armies.get(0));
 
-
-            System.out.println(userszzz);
             usersService.saveOrUpdate(userszzz);
             //SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
-            usersService.saveOrUpdate(new Users("Really need to create a nick","1234","jabber2",66.6666,15,characters.get(1),armies.get(1)));
+            usersService.saveOrUpdate(new Users("nick","4321","jabber2",66.6666,15,characters.get(1),armies.get(1)));
 
             List<Users> users=new ArrayList<>();
 
@@ -203,7 +200,6 @@ public class Application {
             log.info("--------------------------------------");
             log.info(buildingsService.getById(1).getUnit().toString());
 
-            appUserRepository.save(new AppUser("admin","1234","ROLE_USER"));
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
 		};
 	}
