@@ -84,14 +84,14 @@ public class Application {
             }
 
             Characters char1=new Characters("Леголас","Лучник",races.get(1),"icons/characters/legolas.jpg","icons/characters/battle_legolas.jpg");
-            char1.addAbility(new Abilities("Выстрел","нанесение урона",0,2,50));
-            char1.addAbility(new Abilities("Мощный выстрел","нанесение урона",3,4,150));
-            char1.addAbility(new Abilities("Меткий выстрел","нанесение урона",9,7,500));
+            char1.addAbility(new Abilities("Выстрел","нанесение урона",2,50,"description description description description description description ","enemy"));
+            char1.addAbility(new Abilities("Мощный выстрел","нанесение урона",4,150,"description description description description description description ","enemy"));
+            char1.addAbility(new Abilities("Меткий выстрел","нанесение урона",7,500,"description description description description description description ","enemy"));
 
             Characters char2=new Characters("Саурон","Маг",races.get(0),"icons/characters/sauron.jpg","icons/characters/battle_sauron.jpg");
-            char2.addAbility(new Abilities("Удар","нанесение урона",0,2,60));
-            char2.addAbility(new Abilities("Удар Дубиной","нанесение урона",3,5,200));
-            char2.addAbility(new Abilities("Сокрушающий удар","нанесение урона",9,9,630));
+            char2.addAbility(new Abilities("Удар","нанесение урона",2,60,"description description description description description description ","enemy"));
+            char2.addAbility(new Abilities("Удар Дубиной","нанесение урона",5,200,"description description description description description description ","enemy"));
+            char2.addAbility(new Abilities("Сокрушающий удар","нанесение урона",9,630,"description description description description description description ","enemy"));
 
             charactersService.saveOrUpdate(char1);
             charactersService.saveOrUpdate(char2);

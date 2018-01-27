@@ -132,6 +132,10 @@ mm > mm[title] {
     border-spacing: 10px;
 }
 
+.centered{
+    align-self: center;
+}
+
 .modalDialog {
     position: fixed;
     font-family: Arial, Helvetica, sans-serif;
@@ -195,6 +199,7 @@ mm > mm[title] {
     font-size: 15px;
     font-family: monospace;
     border-spacing: 50px;
+    margin: auto;
 }
 .c:hover {
     box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */

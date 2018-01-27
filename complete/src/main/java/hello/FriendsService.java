@@ -41,7 +41,9 @@ public class FriendsService {
      */
     public Friends getById (int id){
         Friends friends=friendRepository.findOne(id);
-        init(friends);
+        if(friends!=null) {
+            init(friends);
+        }
         return friendRepository.findOne(id);
     }
 
@@ -53,7 +55,9 @@ public class FriendsService {
     public Iterable<Friends> getAll(){
         Iterable<Friends> friends=friendRepository.findAll();
         for(Friends friend:friends){
-            init(friend);
+            if(friend!=null) {
+                init(friend);
+            }
         }
         return friends;
     }
@@ -67,7 +71,9 @@ public class FriendsService {
     public Iterable<Friends> getAllByUser1(Users user){
         Iterable<Friends> friends=friendRepository.findAllByUser1(user);
         for(Friends friend:friends){
-            init(friend);
+            if(friend!=null) {
+                init(friend);
+            }
         }
         return friends;
     }

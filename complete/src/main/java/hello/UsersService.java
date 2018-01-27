@@ -43,7 +43,9 @@ public class UsersService {
 
     public Users getById (int id){
         Users user = userRepository.findOne(id);
-        init(user);
+        if(user!=null) {
+            init(user);
+        }
         return user;
     }
 
@@ -78,7 +80,9 @@ public class UsersService {
 
     public Users getByNick (String nick){
         Users user = userRepository.findByNick(nick);
-        init(user);
+        if(user!=null) {
+            init(user);
+        }
         return user;
     }
 
@@ -90,7 +94,9 @@ public class UsersService {
     public Iterable<Users> getAll(){
         Iterable<Users> users = userRepository.findAll();
         for(Users user: users){
-            init(user);
+            if(user!=null) {
+                init(user);
+            }
         }
         return users;
     }

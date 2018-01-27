@@ -13,6 +13,7 @@
 
 <div class="spec"></div>
 
+<label id="loginError" class="error"></label>
 <form th:action="@{/login}" method="post">
     <table>
         <tbody>
@@ -77,9 +78,11 @@
     <![CDATA[
     <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
     <div class="leaderboard">
-        <p class="bordered">
-            Лучшие игроки
-        </p>
+        <div class="bordered">
+            <p>
+                Лучшие игроки
+            </p>
+        </div>
         <div class="bordered">
             <table class="tableR">
                 <tbody>
@@ -91,8 +94,6 @@
                     <% players.forEach(function(item,i,arr){print('<tr><td>'+(i+1)+'</td><td>'+item.name+'</td><td>'+item.winrate+'</td></tr>')})%>
                 </tbody>
             </table>
-
-
         </div>
     </div>
     <!-- ]]> -->

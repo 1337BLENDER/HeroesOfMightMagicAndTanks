@@ -22,7 +22,6 @@ $(function () {
         defaults: {
             state: "description",
             players: [{name:"Adam", winrate:"100"},{name:"sdsd", winrate:"234"}],
-            route: window.location
         }
     });
 
@@ -61,14 +60,24 @@ $(function () {
             "click input#reg": "goToRegistration"
         },
 
+        resetErrorLabel: function () {
+            if(window.location.search==='?error'){
+                document.getElementById("loginError").innerHTML="неверный логин или пароль";
+            }else {
+                document.getElementById("loginError").innerHTML="";
+            }
+        },
+
         initialize: function () {
             this.model.bind('change', this.render, this);
+            this.resetErrorLabel();
         },
 
         setDescr: function () {
             appState.set({
                 "state": "description"
             });
+            this.resetErrorLabel();
         },
 
         setLead: function () {
@@ -83,12 +92,13 @@ $(function () {
                     });
                 }
             };
+            this.resetErrorLabel();
             leaders.fetch(params);
         },
 
         goToRegistration: function () {
             window.location.hash="";
-            window.location.pathname+="registration";
+            window.location.pathname="/registration";
         },
 
         render: function () {

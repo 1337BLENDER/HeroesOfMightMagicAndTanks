@@ -1,15 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head  lang="en" xmlns:th="http://www.thymeleaf.org">
     <meta charset="UTF-8"/>
     <title>Registration</title>
     <link type="text/css" rel="stylesheet" href="/css/style.css" />
     <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
     <script type="text/javascript" src="/js/underscore.js"></script>
     <script type="text/javascript" src="/js/backbone.js"></script>
+    <script type="text/javascript" src="/js/registration.js"></script>
 </head>
 <body>
     <div class="spec"></div>
-    Welcome to registration page
+    <p>Добро пожаловать на страницу регистрации</p>
+    <a class="c" href="/" >Назад</a>
+    <div id="block"></div>
+
+    <script type="text/template" id="user">
+        <![CDATA[
+        <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
+        <div class="user">
+            <table style="text-align: left; padding-top: 20px">
+                <tbody>
+                    <tr>
+                        <th><label for="nick">Ник:</label></th>
+                        <th><input type="text" placeholder="ник" id="nick" value="<% print(user.nick) %>"/></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><label id="nickError" class="error"><% print(nickError) %></label></th>
+                    </tr>
+                    <tr>
+                        <th><label for="password">Пароль:</label></th>
+                        <th><input type="password" placeholder="пароль" value="<% print(user.password) %>" id="password"/></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><label id="passwordError" class="error"><% print(passwordError) %></label></th>
+                    </tr>
+                    <tr>
+                        <th><label for="jabber">Jabber аккаунт:</label></th>
+                        <th><input type="text" placeholder="jabber" id="jabber" value="<% print(user.jabber) %>"/></th>
+                    </tr>
+                    <tr>
+                        <th colspan="2"><label id="jabberError" class="error"><% print(jabberError) %></label></th>
+                    </tr>
+                    <tr>
+                        <th><input id="char" type="button" value="К выбору персонажа"/></th>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <!-- ]]> -->
+    </script>
+
+    <script type="text/template" id="character">
+        <![CDATA[
+        <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
+        <div class="character">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>
+                            <input type="button" value="предыдущий" id="previous"/>
+                        </th>
+                        <th>
+                            <input type="button" value="следующий" id="next"/>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="tableR">
+                <tbody>
+                    <tr>
+                        <th width="25%">Персонаж</th>
+                        <th width="75%" colspan="3">Способности</th>
+                    </tr>
+                    <tr>
+                        <th>
+                            <canvas width="250" height="250" style="background-image: url(<% print(tempChar.iconUrl) %>)"></canvas>
+                            <label class="centered"><% print(tempChar.name) %></label>
+                            <label class="centered"><% print(tempChar.clazz) %></label>
+                        </th>
+                        <% tempChar.abilities.forEach(ability=>{print("<th>"+
+                        "<label>Название: "+ability.name+"</label>"+
+                        "<label>Цель: "+ability.target+"</label>"+
+                        "<label>Сила: "+ability.damage+"</label>"+
+                        "<label>Мана: "+ability.manaPoints+"</label>"+
+                        "<label>Описание:</label>"+
+                        "<p>Цель: "+ability.description+"</p>")}) %>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="button" id="army" value="К армии"/>
+        </div>
+        <!-- ]]> -->
+    </script>
 </body>
 </html>
