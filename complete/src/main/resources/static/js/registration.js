@@ -1,18 +1,12 @@
 $(function () {
     var Characters = Backbone.Collection.extend({
-        url:"/service/getCharacters",
-        initialize:function () {
-            this.fetch();
-        }
+        url:"/service/getCharacters"
     });
     var User = Backbone.Model.extend({
 
     });
     var Units = Backbone.Collection.extend({
-        url:"/service/getUnits",
-        initialize:function () {
-            this.fetch();
-        }
+        url:"/service/getUnits"
     });
     var AppState = Backbone.Model.extend({
         defaults:{
@@ -61,14 +55,20 @@ $(function () {
 
         templates: {
             "user": _.template($('#user').html()),
-            "character": _.template($('#character').html())
+            "character": _.template($('#character').html()),
+            "army": _.template($('#army').html())
         },
 
         events: {
             "change input#nick": "checkNick",
             "change input#password": "checkPassword",
             "change input#jabber": "checkJabber",
-            "click input#char": "goToCharacter"
+            "click input#char": "goToCharacter",
+            "click input#next": "nextChar",
+            "click input#previous": "prevChar",
+            "click input#toArmy": "goToArmy",
+            "click input#nextUnit": "nextUnit",
+            "click input#previousUnit": "prevUnit"
         },
 
         initialize:function () {
@@ -131,16 +131,47 @@ $(function () {
         },
 
         goToCharacter:function () {
-            if(this.checkFilled()) {
-                appState.set({
-                    state: "character",
-                    user: {
-                        nick: $(this.el).find("input#nick").value,
-                        password: $(this.el).find("input#password").value,
-                        jabber: $(this.el).find("input#jabber").value
+            var oterThis = this;
+            var params = {
+                success: function () {
+                    if(oterThis.checkFilled()) {
+                        appState.set({
+                            state: "character",
+                            charInd: 0,
+                            tempChar: characters.toJSON()[0],
+                            charNum: characters.length,
+                            user: {
+                                nick: $(this.el).find("input#nick").value,
+                                password: $(this.el).find("input#password").value,
+                                jabber: $(this.el).find("input#jabber").value
+                            }
+                        })
                     }
-                })
-            }
+                }
+            };
+            characters.fetch(params);
+        },
+
+        goToArmy: function () {
+            var pastUser=this.model.get("user");
+            var outerThis = this;
+            var params = {
+                success: function () {
+                    appState.set({
+                        state: "army",
+                        user: {
+                            nick: pastUser.nick,
+                            password: pastUser.password,
+                            jabber: pastUser.jabber,
+                            character: outerThis.model.get("tempChar")
+                        },
+                        unitInd: 0,
+                        unitNum: units.length,
+                        shownUnits:[units.at(0).toJSON(),units.at(1).toJSON(),units.at(2).toJSON()]
+                    })
+                }
+            };
+            units.fetch(params);
         },
 
         render:function () {
@@ -148,8 +179,63 @@ $(function () {
             $(this.el).html(this.templates[state](this.model.toJSON()));
             return this;
 
-        }
+        },
 
+        nextChar:function () {
+            var ind = this.model.get("charInd");
+            if(ind+1<this.model.get("charNum")){
+                ind++;
+                appState.set({
+                    charInd: ind,
+                    tempChar: characters.at(ind).toJSON()
+                })
+            }
+        },
+
+        prevChar:function () {
+            var ind = this.model.get("charInd");
+            if(ind>0){
+                ind--;
+                appState.set({
+                    charInd: ind,
+                    tempChar: characters.at(ind).toJSON()
+                })
+            }
+        },
+
+        nextUnit:function () {
+            var ind = this.model.get("unitInd");
+            var shown = this.model.get("shownUnits");
+            var length = shown.length;
+            for(var i=0;i<length-1;i++){
+                shown[i]=shown[i+1]
+            }
+            if(ind+length<this.model.get("unitNum")){
+                shown[length-1]=units.at(ind+length).toJSON();
+                ind++;
+                appState.set({
+                    unitInd: ind,
+                    shownUnits: shown
+                })
+            }
+        },
+
+        prevUnit:function () {
+            var ind = this.model.get("unitInd");
+            var shown = this.model.get("shownUnits");
+            var length = shown.length;
+            for(var i=length-2;i>=0;i--){
+                shown[i+1]=shown[i]
+            }
+            if (ind > 0) {
+                ind--;
+                shown[0]=units.at(ind).toJSON();
+                appState.set({
+                    unitInd: ind,
+                    shownUnits: shown
+                })
+            }
+        }
     });
     var block = new Registration({ model: appState });
 

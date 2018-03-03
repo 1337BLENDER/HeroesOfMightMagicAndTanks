@@ -20,6 +20,7 @@ public class Abilities {
     private String description;
     private String target;
 
+
     public int getId() {
         return id;
     }

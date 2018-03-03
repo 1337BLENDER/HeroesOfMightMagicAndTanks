@@ -205,3 +205,7 @@ mm > mm[title] {
     box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
     color: #2165d3
 }
+
+.pad {
+    margin: 10px;
+}

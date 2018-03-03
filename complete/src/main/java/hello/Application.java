@@ -27,6 +27,7 @@ public class Application {
 	@Bean
 	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService, FriendsService friendsService, RoleRepository roleRepository, AppUserRepository appUserRepository ) {
 		return (args) -> {
+            /*
 			raceService.saveOrUpdate(new Race("Эльфы","/icons/races/elf.jpg"));
             raceService.saveOrUpdate(new Race("Орки","/icons/races/orc.jpg"));
             raceService.saveOrUpdate(new Race("Гномы","/icons/races/dwarf.jpg"));
@@ -44,9 +45,10 @@ public class Application {
                 log.info(races.get(i).toString());
             }
 
-            unitsService.saveOrUpdate(new Units("Эпический крушитель",10,"ближний бой",666,null,null,228,1488,100500,races.get(1),"icons/units/epic.jpg","icons/units/battle_epic.jpg"));
-            unitsService.saveOrUpdate(new Units("Эльфийский лучник",3,"дальний бой",200,10,15,200,1300,300,races.get(0),"icons/units/elf_shooter.jpg","icons/units/battle_elf_shooter.jpg"));
-            unitsService.saveOrUpdate(new Units("dhg",100,"ближний бой",100,null,null,208,1488,100500,races.get(1),"icons/units/dhg.jpg","icons/units/battle_dhg.jpg"));
+            unitsService.saveOrUpdate(new Units("Эпический крушитель",10,"ближний бой",666,0,0,228,1488,100500,races.get(1),"/icons/units/epic.jpg","/icons/units/battle_epic.jpg"));
+            unitsService.saveOrUpdate(new Units("Эльфийский лучник",3,"дальний бой",200,10,15,200,1300,300,races.get(0),"/icons/units/elf_shooter.jpg","/icons/units/battle_elf_shooter.jpg"));
+            unitsService.saveOrUpdate(new Units("dhg",100,"ближний бой",100,0,0,208,1488,100500,races.get(1),"/icons/units/dhg.jpg","/icons/units/battle_dhg.jpg"));
+            unitsService.saveOrUpdate(new Units("Гномий воин",43,"ближний бой",120,0,0,212,234,234,races.get(2),"/icons/units/dwarf.jpg","/icons/units/battle_dwarf.jpg"));
 			Iterable<Units> unitsIter=unitsService.getAll();
 			List<Units>units=new ArrayList<>();
             for (Units unit:unitsIter) {
@@ -83,12 +85,12 @@ public class Application {
                 log.info(city.toString());
             }
 
-            Characters char1=new Characters("Леголас","Лучник",races.get(1),"icons/characters/legolas.jpg","icons/characters/battle_legolas.jpg");
+            Characters char1=new Characters("Леголас","Лучник",races.get(1),"/icons/characters/legolas.jpg","icons/characters/battle_legolas.jpg");
             char1.addAbility(new Abilities("Выстрел","нанесение урона",2,50,"description description description description description description ","enemy"));
             char1.addAbility(new Abilities("Мощный выстрел","нанесение урона",4,150,"description description description description description description ","enemy"));
             char1.addAbility(new Abilities("Меткий выстрел","нанесение урона",7,500,"description description description description description description ","enemy"));
 
-            Characters char2=new Characters("Саурон","Маг",races.get(0),"icons/characters/sauron.jpg","icons/characters/battle_sauron.jpg");
+            Characters char2=new Characters("Саурон","Маг",races.get(0),"/icons/characters/sauron.jpg","icons/characters/battle_sauron.jpg");
             char2.addAbility(new Abilities("Удар","нанесение урона",2,60,"description description description description description description ","enemy"));
             char2.addAbility(new Abilities("Удар Дубиной","нанесение урона",5,200,"description description description description description description ","enemy"));
             char2.addAbility(new Abilities("Сокрушающий удар","нанесение урона",9,630,"description description description description description description ","enemy"));
@@ -199,6 +201,7 @@ public class Application {
 
             log.info("--------------------------------------");
             log.info(buildingsService.getById(1).getUnit().toString());
+            */
 
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
 		};

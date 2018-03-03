@@ -1,18 +1,7 @@
 $(function () {
 
-    var Leader = Backbone.Model.extend(
-        {
-            defaults:{
-                name: "leader",
-                winrate: "100"
-            }
-        }
-    );
-
     var Leaders = Backbone.Collection.extend({
-            model: Leader,
-            url: "/service/getLeaderboard",
-            defaults: [{name:"name",winrate:"2"},{name:"name",winrate:"2"}]
+            url: "/service/getLeaderboard"
         }
     );
 
