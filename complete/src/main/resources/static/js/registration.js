@@ -68,7 +68,17 @@ $(function () {
             "click input#previous": "prevChar",
             "click input#toArmy": "goToArmy",
             "click input#nextUnit": "nextUnit",
-            "click input#previousUnit": "prevUnit"
+            "click input#previousUnit": "prevUnit",
+            //"change input#count1": "changeCount1",
+            "change input#count1": "changeCount1",
+            "change input#count2": "changeCount2",
+            "change input#count3": "changeCount3",
+            "click input#plus1": "plusCount1",
+            "click input#plus2": "plusCount2",
+            "click input#plus3": "plusCount3",
+            "click input#minus1": "minusCount1",
+            "click input#minus2": "minusCount2",
+            "click input#minus3": "minusCount3"
         },
 
         initialize:function () {
@@ -157,6 +167,12 @@ $(function () {
             var outerThis = this;
             var params = {
                 success: function () {
+                    var unitNumber = units.length;
+                    var unitCounters = [];
+                    var shownUnitCounters = [0,0,0];
+                    for(var i=0;i<unitNumber;i++){
+                        unitCounters.push(0);
+                    }
                     appState.set({
                         state: "army",
                         user: {
@@ -167,7 +183,10 @@ $(function () {
                         },
                         unitInd: 0,
                         unitNum: units.length,
-                        shownUnits:[units.at(0).toJSON(),units.at(1).toJSON(),units.at(2).toJSON()]
+                        unitCount: unitCounters,
+                        shownUnits:[units.at(0).toJSON(),units.at(1).toJSON(),units.at(2).toJSON()],
+                        shownUnitCount: shownUnitCounters,
+                        power: 0
                     })
                 }
             };
@@ -203,19 +222,34 @@ $(function () {
             }
         },
 
+        calculatePower: function () {
+            var pow = 0;
+            for(var i=0;i<this.model.get("unitNum");i++){
+                pow+=units.at(i).get("power")*this.model.get("unitCount")[i];
+            }
+            appState.set({
+                power:pow
+            });
+        },
+
         nextUnit:function () {
             var ind = this.model.get("unitInd");
             var shown = this.model.get("shownUnits");
+            var counters = this.model.get("unitCount");
+            var shownCounters = this.model.get("shownUnitCount");
             var length = shown.length;
-            for(var i=0;i<length-1;i++){
-                shown[i]=shown[i+1]
-            }
             if(ind+length<this.model.get("unitNum")){
+                for(var i=0;i<length-1;i++){
+                    shown[i]=shown[i+1];
+                    shownCounters[i]=shownCounters[i+1];
+                }
                 shown[length-1]=units.at(ind+length).toJSON();
+                shownCounters[length-1]=counters[ind+length];
                 ind++;
                 appState.set({
                     unitInd: ind,
-                    shownUnits: shown
+                    shownUnits: shown,
+                    shownUnitCount: shownCounters
                 })
             }
         },
@@ -223,18 +257,80 @@ $(function () {
         prevUnit:function () {
             var ind = this.model.get("unitInd");
             var shown = this.model.get("shownUnits");
+            var counters = this.model.get("unitCount");
+            var shownCounters = this.model.get("shownUnitCount");
             var length = shown.length;
-            for(var i=length-2;i>=0;i--){
-                shown[i+1]=shown[i]
-            }
             if (ind > 0) {
+                for(var i=length-2;i>=0;i--){
+                    shown[i+1]=shown[i];
+                    shownCounters[i+1]=shownCounters[i];
+                }
                 ind--;
                 shown[0]=units.at(ind).toJSON();
+                shownCounters[0]=counters[ind];
                 appState.set({
                     unitInd: ind,
-                    shownUnits: shown
+                    shownUnits: shown,
+                    shownUnitCount: shownCounters
                 })
             }
+        },
+
+        changeCount: function (index,value) {
+            var unitCounters = this.model.get("unitCount");
+            unitCounters[index+this.model.get("unitInd")]=value;
+            var shownCounters = this.model.get("shownUnitCount");
+            shownCounters[index]=value;
+            appState.set({
+                shownUnitCount: shownCounters,
+                unitCount: unitCounters
+            });
+            this.calculatePower()
+        },
+
+        changeCount1: function () {
+            var index = 0;
+            var value = $("input#count1").val();
+            this.changeCount(index,value);
+        },
+
+        changeCount2: function () {
+            var index = 1;
+            this.changeCount(index,$("input#count2").val());
+        },
+
+        changeCount3: function () {
+            var index = 2;
+            var value = document.getElementById("count3").value;
+            value++;
+            this.changeCount(index,value);
+        },
+        plusCount1: function () {
+            if(this.model.get("power")<=100)
+                this.changeCount(0,Number($("input#count1").val())+1);
+        },
+        plusCount2: function () {
+            if(this.model.get("power")<=100)
+                this.changeCount(1,Number($("input#count2").val())+1);
+        },
+        plusCount3: function () {
+            if(this.model.get("power")<=100)
+                this.changeCount(2,Number($("input#count3").val())+1);
+        },
+        minusCount1: function () {
+            var value=$("input#count1").val();
+            if(value>0)
+                this.changeCount(0,value-1);
+        },
+        minusCount2: function () {
+            var value=$("input#count2").val();
+            if(value>0)
+                this.changeCount(1,value-1);
+        },
+        minusCount3: function () {
+            var value=$("input#count3").val();
+            if(value>0)
+                this.changeCount(2,value-1);
         }
     });
     var block = new Registration({ model: appState });

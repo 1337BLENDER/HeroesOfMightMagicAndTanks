@@ -102,6 +102,8 @@
         <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
         <div class="army">
             <p>Выберите юнитов в свою армию. Суммарная сила юнитов в армии не должна превышать 100 очков.</p>
+            <p>Текущая мощность армии: <% print(power)%></p>
+            <div class="error"><%if(power>100){print("Превышен лимит силы армии")}%></div>
             <table>
                 <tbody>
                 <tr>
@@ -133,11 +135,12 @@
                         "<label>Снаряды: "+unit.ammo+"</label></br>"+
                         "</th>")})%>
                     </tr>
+                    <tr>
+                        <% shownUnitCount.forEach((count,index)=>{print("<th><label>Увас в армии</label></br><input type='button' id='minus"+(index+1)+"' value='-'><input id='count"+(index+1)+"' type='number' min='0' max='100' value='"+count+"'><input type='button' id='plus"+(index+1)+"' value='+'></th>")})%>
+                    </tr>
                 </tbody>
             </table>
-
-        </div>
-        <!-- ]]> -->
+        </div>        <!-- ]]> -->
     </script>
 </body>
 </html>

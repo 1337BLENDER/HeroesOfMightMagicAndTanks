@@ -27,7 +27,7 @@ public class Application {
 	@Bean
 	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService, FriendsService friendsService, RoleRepository roleRepository, AppUserRepository appUserRepository ) {
 		return (args) -> {
-            /*
+/*
 			raceService.saveOrUpdate(new Race("Эльфы","/icons/races/elf.jpg"));
             raceService.saveOrUpdate(new Race("Орки","/icons/races/orc.jpg"));
             raceService.saveOrUpdate(new Race("Гномы","/icons/races/dwarf.jpg"));
@@ -45,10 +45,10 @@ public class Application {
                 log.info(races.get(i).toString());
             }
 
-            unitsService.saveOrUpdate(new Units("Эпический крушитель",10,"ближний бой",666,0,0,228,1488,100500,races.get(1),"/icons/units/epic.jpg","/icons/units/battle_epic.jpg"));
-            unitsService.saveOrUpdate(new Units("Эльфийский лучник",3,"дальний бой",200,10,15,200,1300,300,races.get(0),"/icons/units/elf_shooter.jpg","/icons/units/battle_elf_shooter.jpg"));
-            unitsService.saveOrUpdate(new Units("dhg",100,"ближний бой",100,0,0,208,1488,100500,races.get(1),"/icons/units/dhg.jpg","/icons/units/battle_dhg.jpg"));
-            unitsService.saveOrUpdate(new Units("Гномий воин",43,"ближний бой",120,0,0,212,234,234,races.get(2),"/icons/units/dwarf.jpg","/icons/units/battle_dwarf.jpg"));
+            unitsService.saveOrUpdate(new Units("Эпический крушитель",10,"ближний бой",666,0,0,228,15,100500,races.get(1),"/icons/units/epic.jpg","/icons/units/battle_epic.jpg"));
+            unitsService.saveOrUpdate(new Units("Эльфийский лучник",3,"дальний бой",200,10,4,200,15,300,races.get(0),"/icons/units/elf_shooter.jpg","/icons/units/battle_elf_shooter.jpg"));
+            unitsService.saveOrUpdate(new Units("dhg",100,"ближний бой",100,0,0,208,1,100500,races.get(1),"/icons/units/dhg.jpg","/icons/units/battle_dhg.jpg"));
+            unitsService.saveOrUpdate(new Units("Гномий воин",43,"ближний бой",120,0,0,212,5,234,races.get(2),"/icons/units/dwarf.jpg","/icons/units/battle_dwarf.jpg"));
 			Iterable<Units> unitsIter=unitsService.getAll();
 			List<Units>units=new ArrayList<>();
             for (Units unit:unitsIter) {
@@ -201,7 +201,7 @@ public class Application {
 
             log.info("--------------------------------------");
             log.info(buildingsService.getById(1).getUnit().toString());
-            */
+*/
 
             SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
 		};
