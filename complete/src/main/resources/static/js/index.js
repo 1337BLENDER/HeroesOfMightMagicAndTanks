@@ -10,7 +10,7 @@ $(function () {
     var AppState = Backbone.Model.extend({
         defaults: {
             state: "description",
-            players: [{name:"Adam", winrate:"100"},{name:"sdsd", winrate:"234"}],
+            players: [{name: "Adam", winrate: "100"}, {name: "sdsd", winrate: "234"}],
         }
     });
 
@@ -24,11 +24,11 @@ $(function () {
         },
 
         description: function () {
-            appState.set({ state: "description" });
+            appState.set({state: "description"});
         },
 
         leaderboard: function () {
-            appState.set({ state: "leaders" });
+            appState.set({state: "leaders"});
         }
     });
 
@@ -50,16 +50,25 @@ $(function () {
         },
 
         resetErrorLabel: function () {
-            if(window.location.search==='?error'){
-                document.getElementById("loginError").innerHTML="неверный логин или пароль";
-            }else {
-                document.getElementById("loginError").innerHTML="";
+            if (window.location.search === '?error') {
+                document.getElementById("loginError").innerHTML = "неверный логин или пароль";
+            } else {
+                document.getElementById("loginError").innerHTML = "";
+            }
+        },
+
+        resetSuccessLabel: function () {
+            if (window.location.search === '?success') {
+                document.getElementById("success").innerHTML = "Ваш аккаунт успешно создан. Войдите в личный кабинет, чтобы продолжить работу";
+            } else {
+                document.getElementById("success").innerHTML = "";
             }
         },
 
         initialize: function () {
             this.model.bind('change', this.render, this);
             this.resetErrorLabel();
+            this.resetSuccessLabel();
         },
 
         setDescr: function () {
@@ -70,11 +79,11 @@ $(function () {
         },
 
         setLead: function () {
-            var params={
-                data:{
+            var params = {
+                data: {
                     limit: "5"
                 },
-                success:function () {
+                success: function () {
                     appState.set({
                         "players": leaders.toJSON(),
                         "state": "leaders"
@@ -86,8 +95,7 @@ $(function () {
         },
 
         goToRegistration: function () {
-            window.location.hash="";
-            window.location.pathname="/registration";
+            window.location.href = window.location.origin += "/registration";
         },
 
         render: function () {
@@ -97,7 +105,7 @@ $(function () {
         }
     });
 
-    var block = new Block({ model: appState });
+    var block = new Block({model: appState});
 
     appState.trigger("change");
 

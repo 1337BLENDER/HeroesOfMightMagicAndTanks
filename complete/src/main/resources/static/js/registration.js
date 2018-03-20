@@ -1,36 +1,34 @@
 $(function () {
     var Characters = Backbone.Collection.extend({
-        url:"/service/getCharacters"
+        url: "/service/getCharacters"
     });
-    var User = Backbone.Model.extend({
-
-    });
+    var User = Backbone.Model.extend({});
     var Units = Backbone.Collection.extend({
-        url:"/service/getUnits"
+        url: "/service/getUnits"
     });
     var AppState = Backbone.Model.extend({
-        defaults:{
+        defaults: {
             state: "user",
             nickError: "",
             passwordError: "",
             jabberError: "",
-            user:{
-                nick:"",
-                password:"",
-                jabber:""
+            user: {
+                nick: "",
+                password: "",
+                jabber: ""
             }
         }
     });
     var Check = Backbone.Model.extend({
-        url:"/service/checkNick"
+        url: "/service/checkNick"
     });
 
     var appState = new AppState();
     var units = new Units();
     var characters = new Characters();
     var check = new Check();
-    var user=new User();
-    appState.set({user:user});
+    var user = new User();
+    appState.set({user: user});
 
     var Controller = Backbone.Router.extend({
         routes: {
@@ -40,11 +38,11 @@ $(function () {
         },
 
         character: function () {
-            appState.set({ state: "character" });
+            appState.set({state: "character"});
         },
 
         user: function () {
-            appState.set({ state: "user" });
+            appState.set({state: "user"});
         }
     });
 
@@ -69,7 +67,6 @@ $(function () {
             "click input#toArmy": "goToArmy",
             "click input#nextUnit": "nextUnit",
             "click input#previousUnit": "prevUnit",
-            //"change input#count1": "changeCount1",
             "change input#count1": "changeCount1",
             "change input#count2": "changeCount2",
             "change input#count3": "changeCount3",
@@ -78,82 +75,85 @@ $(function () {
             "click input#plus3": "plusCount3",
             "click input#minus1": "minusCount1",
             "click input#minus2": "minusCount2",
-            "click input#minus3": "minusCount3"
+            "click input#minus3": "minusCount3",
+            "click input#complete": "complete"
         },
 
-        initialize:function () {
+        initialize: function () {
             this.model.bind('change', this.render, this);
         },
 
         checkNick: function () {
             var nick = document.getElementById("nick");
-            var user=this.model.get("user");
-            user.nick=nick.value;
-            appState.set({nickError:"",user:user});
-            if (nick.value.length<3){
-                appState.set({nickError:"Ник должен содержать минимум 3 символа"});
-            }else {
+            var user = this.model.get("user");
+            user.nick = nick.value;
+            appState.set({nickError: "", user: user});
+            if (nick.value.length < 3) {
+                appState.set({nickError: "Ник должен содержать минимум 3 символа"});
+            } else {
+                check.url = "/service/checkNick";
                 check.fetch({
-                    data:{
-                        nick:nick.value
+                    data: {
+                        nick: nick.value
                     },
-                    success:function () {
-                    if(check.attributes.resp==="true"){
-                        appState.set({nickError:"Ник занят"});
+                    success: function () {
+                        if (check.attributes.resp === "true") {
+                            appState.set({nickError: "Ник занят"});
+                        }
                     }
-                }})
+                })
             }
         },
 
-        checkPassword:function () {
+        checkPassword: function () {
             var password = document.getElementById("password");
-            var user=this.model.get("user");
-            user.password=password.value;
-            appState.set({passwordError:"",user:user});
-            if(password.value.length<3){
-                appState.set({passwordError:"Пароль должен содержать минимум 3 символа"});
+            var user = this.model.get("user");
+            user.password = password.value;
+            appState.set({passwordError: "", user: user});
+            if (password.value.length < 3) {
+                appState.set({passwordError: "Пароль должен содержать минимум 3 символа"});
             }
         },
 
-        checkJabber:function () {
+        checkJabber: function () {
             var jabber = $("input#jabber").get(0);
-            var user=this.model.get("user");
-            user.jabber=jabber.value;
-            appState.set({jabberError:"", user: user})
+            var user = this.model.get("user");
+            user.jabber = jabber.value;
+            appState.set({jabberError: "", user: user})
         },
 
-        checkFilled:function () {
-            var ret=true;
-            ret=(this.model.get("jabberError").length+this.model.get("nickError").length+this.model.get("passwordError").length)===0;
-            if($("input#nick").get(0).value.length===0){
-                appState.set({nickError:"Поле обязательно для заполнения"});
-                ret=false;
+        checkFilled: function () {
+            var ret = true;
+            ret = (this.model.get("jabberError").length + this.model.get("nickError").length + this.model.get("passwordError").length) === 0;
+            if ($("input#nick").get(0).value.length === 0) {
+                appState.set({nickError: "Поле обязательно для заполнения"});
+                ret = false;
             }
-            if($("input#password").get(0).value.length===0){
-                appState.set({passwordError:"Поле обязательно для заполнения"});
-                ret=false;
+            if ($("input#password").get(0).value.length === 0) {
+                appState.set({passwordError: "Поле обязательно для заполнения"});
+                ret = false;
             }
-            if($("input#jabber").get(0).value.length===0){
-                appState.set({jabberError:"Поле обязательно для заполнения"});
-                ret=false;
+            if ($("input#jabber").get(0).value.length === 0) {
+                appState.set({jabberError: "Поле обязательно для заполнения"});
+                ret = false;
             }
             return ret;
         },
 
-        goToCharacter:function () {
+        goToCharacter: function () {
             var oterThis = this;
             var params = {
                 success: function () {
-                    if(oterThis.checkFilled()) {
+                    if (oterThis.checkFilled()) {
                         appState.set({
                             state: "character",
                             charInd: 0,
                             tempChar: characters.toJSON()[0],
                             charNum: characters.length,
                             user: {
-                                nick: $(this.el).find("input#nick").value,
-                                password: $(this.el).find("input#password").value,
-                                jabber: $(this.el).find("input#jabber").value
+                                nick: $("input#nick").get(0).value,
+                                password: $("input#password").get(0).value,
+                                jabber: $("input#jabber").get(0).value
                             }
                         })
                     }
@@ -163,14 +163,14 @@ $(function () {
         },
 
         goToArmy: function () {
-            var pastUser=this.model.get("user");
+            var pastUser = this.model.get("user");
             var outerThis = this;
             var params = {
                 success: function () {
                     var unitNumber = units.length;
                     var unitCounters = [];
-                    var shownUnitCounters = [0,0,0];
-                    for(var i=0;i<unitNumber;i++){
+                    var shownUnitCounters = [0, 0, 0];
+                    for (var i = 0; i < unitNumber; i++) {
                         unitCounters.push(0);
                     }
                     appState.set({
@@ -184,7 +184,7 @@ $(function () {
                         unitInd: 0,
                         unitNum: units.length,
                         unitCount: unitCounters,
-                        shownUnits:[units.at(0).toJSON(),units.at(1).toJSON(),units.at(2).toJSON()],
+                        shownUnits: [units.at(0).toJSON(), units.at(1).toJSON(), units.at(2).toJSON()],
                         shownUnitCount: shownUnitCounters,
                         power: 0
                     })
@@ -193,16 +193,16 @@ $(function () {
             units.fetch(params);
         },
 
-        render:function () {
+        render: function () {
             var state = this.model.get("state");
             $(this.el).html(this.templates[state](this.model.toJSON()));
             return this;
 
         },
 
-        nextChar:function () {
+        nextChar: function () {
             var ind = this.model.get("charInd");
-            if(ind+1<this.model.get("charNum")){
+            if (ind + 1 < this.model.get("charNum")) {
                 ind++;
                 appState.set({
                     charInd: ind,
@@ -211,9 +211,9 @@ $(function () {
             }
         },
 
-        prevChar:function () {
+        prevChar: function () {
             var ind = this.model.get("charInd");
-            if(ind>0){
+            if (ind > 0) {
                 ind--;
                 appState.set({
                     charInd: ind,
@@ -224,27 +224,27 @@ $(function () {
 
         calculatePower: function () {
             var pow = 0;
-            for(var i=0;i<this.model.get("unitNum");i++){
-                pow+=units.at(i).get("power")*this.model.get("unitCount")[i];
+            for (var i = 0; i < this.model.get("unitNum"); i++) {
+                pow += units.at(i).get("power") * this.model.get("unitCount")[i];
             }
             appState.set({
-                power:pow
+                power: pow
             });
         },
 
-        nextUnit:function () {
+        nextUnit: function () {
             var ind = this.model.get("unitInd");
             var shown = this.model.get("shownUnits");
             var counters = this.model.get("unitCount");
             var shownCounters = this.model.get("shownUnitCount");
             var length = shown.length;
-            if(ind+length<this.model.get("unitNum")){
-                for(var i=0;i<length-1;i++){
-                    shown[i]=shown[i+1];
-                    shownCounters[i]=shownCounters[i+1];
+            if (ind + length < this.model.get("unitNum")) {
+                for (var i = 0; i < length - 1; i++) {
+                    shown[i] = shown[i + 1];
+                    shownCounters[i] = shownCounters[i + 1];
                 }
-                shown[length-1]=units.at(ind+length).toJSON();
-                shownCounters[length-1]=counters[ind+length];
+                shown[length - 1] = units.at(ind + length).toJSON();
+                shownCounters[length - 1] = counters[ind + length];
                 ind++;
                 appState.set({
                     unitInd: ind,
@@ -254,20 +254,20 @@ $(function () {
             }
         },
 
-        prevUnit:function () {
+        prevUnit: function () {
             var ind = this.model.get("unitInd");
             var shown = this.model.get("shownUnits");
             var counters = this.model.get("unitCount");
             var shownCounters = this.model.get("shownUnitCount");
             var length = shown.length;
             if (ind > 0) {
-                for(var i=length-2;i>=0;i--){
-                    shown[i+1]=shown[i];
-                    shownCounters[i+1]=shownCounters[i];
+                for (var i = length - 2; i >= 0; i--) {
+                    shown[i + 1] = shown[i];
+                    shownCounters[i + 1] = shownCounters[i];
                 }
                 ind--;
-                shown[0]=units.at(ind).toJSON();
-                shownCounters[0]=counters[ind];
+                shown[0] = units.at(ind).toJSON();
+                shownCounters[0] = counters[ind];
                 appState.set({
                     unitInd: ind,
                     shownUnits: shown,
@@ -276,11 +276,11 @@ $(function () {
             }
         },
 
-        changeCount: function (index,value) {
+        changeCount: function (index, value) {
             var unitCounters = this.model.get("unitCount");
-            unitCounters[index+this.model.get("unitInd")]=value;
+            unitCounters[index + this.model.get("unitInd")] = value;
             var shownCounters = this.model.get("shownUnitCount");
-            shownCounters[index]=value;
+            shownCounters[index] = value;
             appState.set({
                 shownUnitCount: shownCounters,
                 unitCount: unitCounters
@@ -288,52 +288,81 @@ $(function () {
             this.calculatePower()
         },
 
+        //3 разных варианта это артефакт. особого смысла нет.
         changeCount1: function () {
             var index = 0;
             var value = $("input#count1").val();
-            this.changeCount(index,value);
+            this.changeCount(index, value);
         },
 
         changeCount2: function () {
             var index = 1;
-            this.changeCount(index,$("input#count2").val());
+            this.changeCount(index, $("input#count2").val());
         },
 
         changeCount3: function () {
             var index = 2;
             var value = document.getElementById("count3").value;
-            value++;
-            this.changeCount(index,value);
+            this.changeCount(index, value);
         },
         plusCount1: function () {
-            if(this.model.get("power")<=100)
-                this.changeCount(0,Number($("input#count1").val())+1);
+            if (this.model.get("power") <= 100)
+                this.changeCount(0, Number($("input#count1").val()) + 1);
         },
         plusCount2: function () {
-            if(this.model.get("power")<=100)
-                this.changeCount(1,Number($("input#count2").val())+1);
+            if (this.model.get("power") <= 100)
+                this.changeCount(1, Number($("input#count2").val()) + 1);
         },
         plusCount3: function () {
-            if(this.model.get("power")<=100)
-                this.changeCount(2,Number($("input#count3").val())+1);
+            if (this.model.get("power") <= 100)
+                this.changeCount(2, Number($("input#count3").val()) + 1);
         },
         minusCount1: function () {
-            var value=$("input#count1").val();
-            if(value>0)
-                this.changeCount(0,value-1);
+            var value = $("input#count1").val();
+            if (value > 0)
+                this.changeCount(0, value - 1);
         },
         minusCount2: function () {
-            var value=$("input#count2").val();
-            if(value>0)
-                this.changeCount(1,value-1);
+            var value = $("input#count2").val();
+            if (value > 0)
+                this.changeCount(1, value - 1);
         },
         minusCount3: function () {
-            var value=$("input#count3").val();
-            if(value>0)
-                this.changeCount(2,value-1);
+            var value = $("input#count3").val();
+            if (value > 0)
+                this.changeCount(2, value - 1);
+        },
+        complete: function () {
+            if (this.model.get("power") <= 100) {
+                check.url = "/service/complete";//используем ту же модель, что и для проверки ника, чтобы не создавать новую
+                var user = this.model.get("user");
+                var unitIDs = [];
+                for (var i = 0; i < units.length; i++) {
+                    unitIDs.push(units.at(i).get("id"))
+                }
+                var params = {
+                    data: {
+                        nick: user.nick,
+                        password: user.password,
+                        jabber: user.jabber,
+                        charName: user.character.name,
+                        unitIDs: unitIDs.toString(),
+                        unitCount: this.model.get("unitCount").toString()
+                    },
+                    success: function () {
+                        window.location.href = window.location.origin += "/?success";
+                    },
+                    error: function () {
+                        appState.set({
+                            submitError: "Произошла ошибка при обработке данных, попробуйте позже"
+                        })
+                    }
+                };
+                check.fetch(params);
+            }
         }
     });
-    var block = new Registration({ model: appState });
+    var block = new Registration({model: appState});
 
     appState.trigger("change");
 

@@ -23,6 +23,12 @@ mm > mm[title] {
     color: #FF0000;
 }
 
+.success {
+    font-size: 15px;
+    font-family: monospace;
+    color: #00AA00;
+}
+
 .spec {
     padding: 20px;
     background-color: #03acea;
@@ -77,10 +83,12 @@ mm > mm[title] {
     border-right: 1px solid;
     border-radius: 10px;
 }
+
 .p-spinner {
-    width:30px;
+    width: 30px;
     background-color: white;
 }
+
 #name {
     font-size: 270%;
 }
@@ -102,7 +110,7 @@ mm > mm[title] {
     color: #001379;
 }
 
-.Xclass:hover, .addButton:hover, .begin:hover{
+.Xclass:hover, .addButton:hover, .begin:hover {
     background: #a5d6f3;
 }
 
@@ -115,24 +123,25 @@ mm > mm[title] {
     color: #001379;
 }
 
-.slide{
+.slide {
     width: 50px;
 }
 
 .pseudo {
     visibility: hidden;
 }
-.table{
+
+.table {
     align-self: center;
 }
 
-.bordered{
+.bordered {
     border: 1px solid black;
     border-radius: 10px;
     border-spacing: 10px;
 }
 
-.centered{
+.centered {
     align-self: center;
 }
 
@@ -143,9 +152,9 @@ mm > mm[title] {
     right: 0;
     bottom: 0;
     left: 0;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0, 0, 0, 0.8);
     z-index: 99999;
-    opacity:0;
+    opacity: 0;
     -webkit-transition: opacity 400ms ease-in;
     -moz-transition: opacity 400ms ease-in;
     transition: opacity 400ms ease-in;
@@ -153,7 +162,7 @@ mm > mm[title] {
 }
 
 .modalDialog:target {
-    opacity:1;
+    opacity: 1;
     pointer-events: auto;
 }
 
@@ -188,7 +197,9 @@ mm > mm[title] {
     box-shadow: 1px 1px 3px #000;
 }
 
-.close:hover { background: #00d9ff; }
+.close:hover {
+    background: #00d9ff;
+}
 
 .c {
     border: 1px solid #333; /* Рамка */
@@ -201,8 +212,9 @@ mm > mm[title] {
     border-spacing: 50px;
     margin: auto;
 }
+
 .c:hover {
-    box-shadow: 0 0 5px rgba(0,0,0,0.3); /* Тень */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); /* Тень */
     color: #2165d3
 }
 
@@ -211,7 +223,7 @@ mm > mm[title] {
 }
 
 input[type='number'] {
-    -moz-appearance:textfield;
+    -moz-appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,

@@ -4,15 +4,15 @@ import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-@Table(name="army")
+@Table(name = "army")
 public class Army {
     private int id;
     private int power;
     private Collection<UnitsInArmy> units;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE, generator = "army_id_seq")
-    @SequenceGenerator(name="army_id_seq",sequenceName = "army_id_seq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "army_id_seq")
+    @SequenceGenerator(name = "army_id_seq", sequenceName = "army_id_seq")
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -65,12 +65,12 @@ public class Army {
     public Army() {
     }
 
-    public void calculatePower(){
-        power=0;
-        if (units.size()>0)
-        for (UnitsInArmy unitsInArmy:units){
-            power+=unitsInArmy.getUnit().getPower()*unitsInArmy.getNumber();
-        }
+    public void calculatePower() {
+        power = 0;
+        if (units.size() > 0)
+            for (UnitsInArmy unitsInArmy : units) {
+                power += unitsInArmy.getUnit().getPower() * unitsInArmy.getNumber();
+            }
     }
 
     public Army(int id) {
@@ -79,14 +79,14 @@ public class Army {
 
     @Override
     public String toString() {
-        String ret="Army{" +
+        String ret = "Army{" +
                 "id=" + id +
                 ", power=" + power +
                 ", units=";
-                for(UnitsInArmy unitsInArmy:units){
-                    ret+=" "+unitsInArmy.getNumber()+"x"+unitsInArmy.getUnit().toString();
-                }
-                ret+='}';
+        for (UnitsInArmy unitsInArmy : units) {
+            ret += " " + unitsInArmy.getNumber() + "x" + unitsInArmy.getUnit().toString();
+        }
+        ret += '}';
         return ret;
     }
 }

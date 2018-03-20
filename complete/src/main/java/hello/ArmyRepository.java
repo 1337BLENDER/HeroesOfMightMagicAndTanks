@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ArmyRepository extends CrudRepository<Army, Integer> {
-    public Army findFirstById(int id);
+    public Army findFirstByPowerOrderByIdDesc(int power);
 }

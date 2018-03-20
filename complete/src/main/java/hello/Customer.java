@@ -10,12 +10,13 @@ import javax.persistence.Id;
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     private Long id;
     private String firstName;
     private String lastName;
 
-    protected Customer() {}
+    protected Customer() {
+    }
 
     public Customer(String firstName, String lastName) {
         this.firstName = firstName;
@@ -31,16 +32,16 @@ public class Customer {
 
 // end::sample[]
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getFirstName() {
-		return firstName;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public String getLastName() {
-		return lastName;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 }
 

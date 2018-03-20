@@ -11,10 +11,14 @@ public class FriendsService {
     private FriendsRepository friendRepository;
 
     @Autowired
-    public FriendsService(FriendsRepository friendRepository){this.friendRepository=friendRepository;}
-    public FriendsService(){}
+    public FriendsService(FriendsRepository friendRepository) {
+        this.friendRepository = friendRepository;
+    }
 
-    private void init(Friends friend){
+    public FriendsService() {
+    }
+
+    private void init(Friends friend) {
         Hibernate.initialize(friend.getUser1());
         Hibernate.initialize(friend.getUser2());
         //Hibernate.initialize(friend.getUser1().getCity());
@@ -30,18 +34,20 @@ public class FriendsService {
         Hibernate.initialize(friend.getUser1().getCharacter().getAbilities());
         Hibernate.initialize(friend.getUser2().getCharacter().getAbilities());
 //        Hibernate.initialize(friend.getUser1().getRoles());
-  //      Hibernate.initialize(friend.getUser2().getRoles());
+        //      Hibernate.initialize(friend.getUser2().getRoles());
         //Hibernate.initialize(friend.getUser1().getAppUser());
         //Hibernate.initialize(friend.getUser2().getAppUser());
     }
 
-    /**Find and return one friends entity with given id
+    /**
+     * Find and return one friends entity with given id
+     *
      * @param id of required friends entity
      * @return founded friends entity
      */
-    public Friends getById (int id){
-        Friends friends=friendRepository.findOne(id);
-        if(friends!=null) {
+    public Friends getById(int id) {
+        Friends friends = friendRepository.findOne(id);
+        if (friends != null) {
             init(friends);
         }
         return friendRepository.findOne(id);
@@ -49,13 +55,14 @@ public class FriendsService {
 
     /**
      * Find and return all the friends entities
+     *
      * @return friends entities
      */
-    
-    public Iterable<Friends> getAll(){
-        Iterable<Friends> friends=friendRepository.findAll();
-        for(Friends friend:friends){
-            if(friend!=null) {
+
+    public Iterable<Friends> getAll() {
+        Iterable<Friends> friends = friendRepository.findAll();
+        for (Friends friend : friends) {
+            if (friend != null) {
                 init(friend);
             }
         }
@@ -64,14 +71,15 @@ public class FriendsService {
 
     /**
      * Find and return all buildingInCities entities with given user
+     *
      * @param user need to be found
      * @return buildingInCities entities
      */
-    
-    public Iterable<Friends> getAllByUser1(Users user){
-        Iterable<Friends> friends=friendRepository.findAllByUser1(user);
-        for(Friends friend:friends){
-            if(friend!=null) {
+
+    public Iterable<Friends> getAllByUser1(Users user) {
+        Iterable<Friends> friends = friendRepository.findAllByUser1(user);
+        for (Friends friend : friends) {
+            if (friend != null) {
                 init(friend);
             }
         }
@@ -79,30 +87,41 @@ public class FriendsService {
     }
 
     /**
-     *Save friends entity if it's new or update if it's already exists
+     * Save friends entity if it's new or update if it's already exists
+     *
      * @param friend need to be saved
      * @return saved friends entity
      */
-    
-    public Friends saveOrUpdate(Friends friend){return friendRepository.save(friend);}
+
+    public Friends saveOrUpdate(Friends friend) {
+        return friendRepository.save(friend);
+    }
 
     /**
      * Remove friends entity with given id
+     *
      * @param id of the friends entity
      */
 
-    public void deleteById(int id){friendRepository.delete(id);}
+    public void deleteById(int id) {
+        friendRepository.delete(id);
+    }
 
     /**
-     * Remove all the friends entities 
+     * Remove all the friends entities
      */
 
-    public void deleteAll(){friendRepository.deleteAll();}
+    public void deleteAll() {
+        friendRepository.deleteAll();
+    }
 
     /**
      * Remove given friends entity
+     *
      * @param friend need to be removed
      */
-    
-    public void delete(Friends friend){friendRepository.delete(friend);}
+
+    public void delete(Friends friend) {
+        friendRepository.delete(friend);
+    }
 }

@@ -18,25 +18,25 @@ public class Users {
 
     private int id;
     @NotEmpty(message = "*Пожалуйста введите свой ник")
-    @Length(min=3,message = "*Ник должен содержать как минимум 3 символа")
+    @Length(min = 3, message = "*Ник должен содержать как минимум 3 символа")
     private String nick;
     @NotEmpty(message = "*Пожалуйста введите свой пароль")
-    @Length(min=3,message = "*Пароль должен содержать как минимум 3 символа")
+    @Length(min = 3, message = "*Пароль должен содержать как минимум 3 символа")
     private String password;
     private String jabber;
-//    private int gold;
+    //    private int gold;
     private double winrate;
     private int numberOfBattles;
-//    private int experience;
+    //    private int experience;
     private Collection<Friends> friends;
     private Characters character;
-//    private Cities city;
+    //    private Cities city;
     private Army army;
 //    private AppUser appUser;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator = "userSeq")
-    @SequenceGenerator(name = "userSeq",sequenceName = "userSeq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "userSeq")
+    @SequenceGenerator(name = "userSeq", sequenceName = "userSeq")
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -47,7 +47,7 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "nick",nullable = false, length = 255, unique = true)
+    @Column(name = "nick", nullable = false, length = 255, unique = true)
     public String getNick() {
         return nick;
     }
@@ -67,7 +67,7 @@ public class Users {
     }
 
     @Basic
-    @Column(name = "jabber", nullable = true, length =255)
+    @Column(name = "jabber", nullable = true, length = 255)
     public String getJabber() {
         return jabber;
     }
@@ -75,17 +75,18 @@ public class Users {
     public void setJabber(String jabber) {
         this.jabber = jabber;
     }
-/*
-    @Basic
-    @Column(name = "gold", nullable = true)
-    public int getGold() {
-        return gold;
-    }
 
-    public void setGold(int gold) {
-        this.gold = gold;
-    }
-*/
+    /*
+        @Basic
+        @Column(name = "gold", nullable = true)
+        public int getGold() {
+            return gold;
+        }
+
+        public void setGold(int gold) {
+            this.gold = gold;
+        }
+    */
     @Basic
     @Column(name = "winrate", nullable = false, precision = 2)
     public double getWinrate() {
@@ -105,17 +106,18 @@ public class Users {
     public void setNumberOfBattles(int numberOfBattles) {
         this.numberOfBattles = numberOfBattles;
     }
-/*
-    @Basic
-    @Column(name = "experience", nullable = true)
-    public int getExperience() {
-        return experience;
-    }
 
-    public void setExperience(int experience) {
-        this.experience = experience;
-    }
-*/
+    /*
+        @Basic
+        @Column(name = "experience", nullable = true)
+        public int getExperience() {
+            return experience;
+        }
+
+        public void setExperience(int experience) {
+            this.experience = experience;
+        }
+    */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -124,16 +126,16 @@ public class Users {
         Users users = (Users) o;
 
         if (id != users.id) return false;
-  //      if (gold != users.gold) return false;
+        //      if (gold != users.gold) return false;
         if (Double.compare(users.winrate, winrate) != 0) return false;
         if (numberOfBattles != users.numberOfBattles) return false;
-    //    if (experience != users.experience) return false;
+        //    if (experience != users.experience) return false;
         if (!nick.equals(users.nick)) return false;
         if (!password.equals(users.password)) return false;
         if (!jabber.equals(users.jabber)) return false;
         if (friends != null ? !friends.equals(users.friends) : users.friends != null) return false;
         if (!character.equals(users.character)) return false;
-      //  if (city != null ? !city.equals(users.city) : users.city != null) return false;
+        //  if (city != null ? !city.equals(users.city) : users.city != null) return false;
         if (army != null ? !army.equals(users.army) : users.army != null) return false;
         return true;
         //return appUser != null ? appUser.equals(users.appUser) : users.appUser == null;
@@ -178,27 +180,28 @@ public class Users {
     public void setCharacter(Characters character) {
         this.character = character;
     }
-/*
-    @ManyToOne
-    @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = true)
-    public Cities getCity() {
-        return city;
-    }
 
-    public void setCity(Cities city) {
-        this.city = city;
-    }
-/*
-    @OneToOne
-    @JoinColumn(name = "app_user_id")
-    public AppUser getAppUser() {
-        return appUser;
-    }
+    /*
+        @ManyToOne
+        @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = true)
+        public Cities getCity() {
+            return city;
+        }
 
-    public void setAppUser(AppUser appUser) {
-        this.appUser = appUser;
-    }
-*/
+        public void setCity(Cities city) {
+            this.city = city;
+        }
+    /*
+        @OneToOne
+        @JoinColumn(name = "app_user_id")
+        public AppUser getAppUser() {
+            return appUser;
+        }
+
+        public void setAppUser(AppUser appUser) {
+            this.appUser = appUser;
+        }
+    */
     @ManyToOne
     @JoinColumn(name = "army_id", referencedColumnName = "id", nullable = false)
     public Army getArmy() {
@@ -214,20 +217,20 @@ public class Users {
 
     public Users(String nick, String password, String jabber, int gold, double winrate, int numberOfBattles, int experience, Characters character, Cities city, Army army) {
         this.nick = nick;
-        this.password = password;
+        setPassword(password);
         this.jabber = jabber;
-  //      this.gold = gold;
+        //      this.gold = gold;
         this.winrate = winrate;
         this.numberOfBattles = numberOfBattles;
-    //    this.experience = experience;
+        //    this.experience = experience;
         this.character = character;
-      //  this.city = city;
+        //  this.city = city;
         this.army = army;
     }
 
     public Users(String nick, String password, String jabber, double winrate, int numberOfBattles, Characters character, Army army) {
         this.nick = nick;
-        this.password = password;
+        setPassword(password);
         this.jabber = jabber;
         this.winrate = winrate;
         this.numberOfBattles = numberOfBattles;
@@ -237,13 +240,13 @@ public class Users {
 
     public Users(String nick, String password, String jabber, double winrate, int numberOfBattles, Characters character, Army army, AppUser appUser) {
         this.nick = nick;
-        this.password = password;
+        setPassword(password);
         this.jabber = jabber;
         this.winrate = winrate;
         this.numberOfBattles = numberOfBattles;
         this.character = character;
         this.army = army;
-  //      this.appUser = appUser;
+        //      this.appUser = appUser;
     }
 
     public Users(int id) {

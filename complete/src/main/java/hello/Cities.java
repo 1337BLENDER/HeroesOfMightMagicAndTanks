@@ -1,4 +1,5 @@
 package hello;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,8 +13,8 @@ public class Cities {
     //private Collection<BuildingsInCities> buildings;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator = "citySeq")
-    @SequenceGenerator(name = "citySeq",sequenceName = "citySeq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "citySeq")
+    @SequenceGenerator(name = "citySeq", sequenceName = "citySeq")
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -33,7 +34,8 @@ public class Cities {
         this.name = name;
     }
 
-    private Set<Buildings> buildings=new HashSet<>();
+    private Set<Buildings> buildings = new HashSet<>();
+
     @OneToMany(mappedBy = "city", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     public Set<Buildings> getBuildings() {
         return buildings;
@@ -72,14 +74,14 @@ public class Cities {
 
     @Override
     public String toString() {
-        String ret="Cities{" +
+        String ret = "Cities{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", buildings=";
-        for(Buildings building:buildings){
-            ret+=building.toString()+" ";
+        for (Buildings building : buildings) {
+            ret += building.toString() + " ";
         }
-        ret+="}";
+        ret += "}";
         return ret;
     }
 }

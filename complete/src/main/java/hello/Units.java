@@ -20,8 +20,8 @@ public class Units {
     private String battleIconUrl;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO,generator = "unitSeq")
-    @SequenceGenerator(name = "unitSeq",sequenceName = "unitSeq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "unitSeq")
+    @SequenceGenerator(name = "unitSeq", sequenceName = "unitSeq")
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -206,8 +206,7 @@ public class Units {
     }
 
 
-
-    public String toString(){
-        return String.format("Unit[id=%d,name=%s,speed=%d,type=%s,damage=%d,range=%d,ammo=%d,cost=%d,power=%d,hitpoints=%d,Race=%s,iconUrl=%s,battleIconUrl=%s]",id,name,speed,type,damage,range==null?-1:range.intValue(),ammo==null?-1:ammo.intValue(),cost,power,hitpoints,race==null?"error":race.getName(),iconUrl,battleIconUrl);
+    public String toString() {
+        return String.format("Unit[id=%d,name=%s,speed=%d,type=%s,damage=%d,range=%d,ammo=%d,cost=%d,power=%d,hitpoints=%d,Race=%s,iconUrl=%s,battleIconUrl=%s]", id, name, speed, type, damage, range == null ? -1 : range.intValue(), ammo == null ? -1 : ammo.intValue(), cost, power, hitpoints, race == null ? "error" : race.getName(), iconUrl, battleIconUrl);
     }
 }

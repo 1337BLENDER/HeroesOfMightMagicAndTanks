@@ -18,17 +18,17 @@ import java.util.*;
 @EnableJpaRepositories
 public class Application {
 
-	private static final Logger log = LoggerFactory.getLogger(Application.class);
+    private static final Logger log = LoggerFactory.getLogger(Application.class);
 
-	public static void main(String[] args) {
-		SpringApplication.run(Application.class);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(Application.class);
+    }
 
-	@Bean
-	public CommandLineRunner demo(UnitsService unitsService,RaceService raceService,BuildingsService buildingsService,CitiesService citiesService, CharactersService charactersService,AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService,UsersService usersService, FriendsService friendsService, RoleRepository roleRepository, AppUserRepository appUserRepository ) {
-		return (args) -> {
+    @Bean
+    public CommandLineRunner demo(UnitsService unitsService, RaceService raceService, BuildingsService buildingsService, CitiesService citiesService, CharactersService charactersService, AbilitiesService abilitiesService, ArmyService armyService, UnitsInArmyService unitsInArmyService, LocationsService locationsService, UsersService usersService, FriendsService friendsService, RoleRepository roleRepository, AppUserRepository appUserRepository) {
+        return (args) -> {
 /*
-			raceService.saveOrUpdate(new Race("Эльфы","/icons/races/elf.jpg"));
+            raceService.saveOrUpdate(new Race("Эльфы","/icons/races/elf.jpg"));
             raceService.saveOrUpdate(new Race("Орки","/icons/races/orc.jpg"));
             raceService.saveOrUpdate(new Race("Гномы","/icons/races/dwarf.jpg"));
             raceService.saveOrUpdate(new Race("Люди","/icons/races/human.jpg"));
@@ -202,9 +202,8 @@ public class Application {
             log.info("--------------------------------------");
             log.info(buildingsService.getById(1).getUnit().toString());
 */
-
-            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin","doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
-		};
-	}
+            SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken("admin", "doesn't matter", AuthorityUtils.createAuthorityList("ROLE_USER")));
+        };
+    }
 
 }

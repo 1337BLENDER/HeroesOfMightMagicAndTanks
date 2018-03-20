@@ -16,8 +16,8 @@ public class Buildings {
     private Units unit;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO,generator = "builSeq")
-    @SequenceGenerator(name="builSeq",sequenceName = "builSeq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "builSeq")
+    @SequenceGenerator(name = "builSeq", sequenceName = "builSeq")
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -87,7 +87,7 @@ public class Buildings {
         this.unitNumber = unitNumber;
     }
 
-    private Cities city= new Cities();
+    private Cities city = new Cities();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id", referencedColumnName = "id", nullable = false)
@@ -98,8 +98,6 @@ public class Buildings {
     public void setCity(Cities city) {
         this.city = city;
     }
-
-
 
 
     @Override

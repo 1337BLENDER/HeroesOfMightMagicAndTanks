@@ -10,7 +10,7 @@ public class BuildingsInCities {
     private Buildings building;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

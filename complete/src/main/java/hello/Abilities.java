@@ -8,8 +8,8 @@ import java.util.List;
 @Table(name = "abilities")
 public class Abilities {
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE, generator = "abilities_id_seq")
-    @SequenceGenerator(name="abilities_id_seq",sequenceName = "abilities_id_seq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "abilities_id_seq")
+    @SequenceGenerator(name = "abilities_id_seq", sequenceName = "abilities_id_seq")
     @Column(name = "id", nullable = false)
     private int id;
     private String name;
@@ -30,7 +30,7 @@ public class Abilities {
     }
 
     @Basic
-    @Column(name = "name", nullable = false, unique = true,length = 255)
+    @Column(name = "name", nullable = false, unique = true, length = 255)
     public String getName() {
         return name;
     }
@@ -130,9 +130,10 @@ public class Abilities {
         return result;
     }
 
-    public Abilities(){
+    public Abilities() {
     }
-    public Abilities(String name,String type,int level,int manaPoints,int damage){
+
+    public Abilities(String name, String type, int level, int manaPoints, int damage) {
 
         this.name = name;
         this.type = type;

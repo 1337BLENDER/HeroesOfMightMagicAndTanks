@@ -7,5 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CityRepository extends CrudRepository<Cities, Integer> {
     Cities findByName(String name);
+
     void deleteByName(String name);
 }

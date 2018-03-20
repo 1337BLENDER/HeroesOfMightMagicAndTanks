@@ -21,15 +21,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private SpringDataJPAUserDetailsService userDetailsService;
 
-    /*@Autowired
-    @Qualifier("dataSource")
-    DataSource dataSource;*/
-
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)throws Exception{
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(this.userDetailsService).passwordEncoder(AppUser.PASSWORD_ENCODER);
-//        auth.jdbcAuthentication().dataSource(dataSource).usersByUsernameQuery("Select nick, password, active from users where nick = ?").authoritiesByUsernameQuery("select u.nick, r.role from users u inner join user_role ur on(ur.id=u.id) inner join role r on(ur.role_id=r.role_id) where u.nick=? ").passwordEncoder(Users.PASSWORD_ENCODER);
-
     }
 
     @Override

@@ -23,9 +23,10 @@ public class UsersService {
         this.appUserRepository = appUserRepository;
     }
 
-    public UsersService(){}
+    public UsersService() {
+    }
 
-    private void init(Users user){
+    private void init(Users user) {
         Hibernate.initialize(user.getArmy());
         Hibernate.initialize(user.getArmy().getUnits());
         Hibernate.initialize(user.getCharacter());
@@ -36,37 +37,39 @@ public class UsersService {
         //Hibernate.initialize(user.getCity().getBuildings());
     }
 
-    /**Find and return one user with given id
+    /**
+     * Find and return one user with given id
+     *
      * @param id of required user
      * @return founded user
      */
 
-    public Users getById (int id){
+    public Users getById(int id) {
         Users user = userRepository.findOne(id);
-        if(user!=null) {
+        if (user != null) {
             init(user);
         }
         return user;
     }
 
-    public Leader[] getLeaderboard(int limit){
-        List<Leader> leaders= new ArrayList<>();
+    public Leader[] getLeaderboard(int limit) {
+        List<Leader> leaders = new ArrayList<>();
         Leader tempLeader;
-        int i=0;
+        int i = 0;
         loop:
-        for(Users user:userRepository.findAllByOrderByWinrateDesc()){
+        for (Users user : userRepository.findAllByOrderByWinrateDesc()) {
             init(user);
-            tempLeader=new Leader(user.getNick(),user.getWinrate());
+            tempLeader = new Leader(user.getNick(), user.getWinrate());
             leaders.add(tempLeader);
             i++;
-            if(i==limit){
+            if (i == limit) {
                 break loop;
             }
         }
-        Leader[] leaderArray=new Leader[leaders.size()];
-        i=0;
-        for(Leader leader:leaders){
-            leaderArray[i]=leader;
+        Leader[] leaderArray = new Leader[leaders.size()];
+        i = 0;
+        for (Leader leader : leaders) {
+            leaderArray[i] = leader;
             i++;
         }
         return leaderArray;
@@ -74,13 +77,14 @@ public class UsersService {
 
     /**
      * Find and return one user with given nick
+     *
      * @param nick of required user
      * @return founded user
      */
 
-    public Users getByNick (String nick){
+    public Users getByNick(String nick) {
         Users user = userRepository.findByNick(nick);
-        if(user!=null) {
+        if (user != null) {
             init(user);
         }
         return user;
@@ -88,13 +92,14 @@ public class UsersService {
 
     /**
      * Find and return all the users
+     *
      * @return users
      */
 
-    public Iterable<Users> getAll(){
+    public Iterable<Users> getAll() {
         Iterable<Users> users = userRepository.findAll();
-        for(Users user: users){
-            if(user!=null) {
+        for (Users user : users) {
+            if (user != null) {
                 init(user);
             }
         }
@@ -102,41 +107,53 @@ public class UsersService {
     }
 
     /**
-     *Save user if it's new or update if it's already exists
+     * Save user if it's new or update if it's already exists
+     *
      * @param user need to be saved
      * @return saved user
      */
 
-    public Users saveOrUpdate(Users user){
-        AppUser appUser=new AppUser(user.getNick(),user.getPassword(),"ROLE_USER");
+    public Users saveOrUpdate(Users user) {
+        AppUser appUser = new AppUser(user.getNick(), user.getPassword(), "ROLE_USER");
         appUserRepository.save(appUser);
         return userRepository.save(user);
     }
 
     /**
      * Remove user with given id
+     *
      * @param id of the user
      */
 
-    public void deleteById(int id){userRepository.delete(id);}
+    public void deleteById(int id) {
+        userRepository.delete(id);
+    }
 
     /**
      * Remove user with given nick
+     *
      * @param nick of the user
      */
 
-    public void deleteByNick(String nick){userRepository.deleteByNick(nick);}
+    public void deleteByNick(String nick) {
+        userRepository.deleteByNick(nick);
+    }
 
     /**
-     * Remove all the users 
+     * Remove all the users
      */
-    
-    public void deleteAll(){userRepository.deleteAll();}
+
+    public void deleteAll() {
+        userRepository.deleteAll();
+    }
 
     /**
      * Remove given user
+     *
      * @param user need to be removed
      */
-    
-    public void delete(Users user){userRepository.delete(user);}
+
+    public void delete(Users user) {
+        userRepository.delete(user);
+    }
 }

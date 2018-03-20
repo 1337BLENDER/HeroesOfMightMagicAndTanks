@@ -1,4 +1,5 @@
 package hello;
+
 import javax.persistence.*;
 
 @Entity
@@ -6,8 +7,8 @@ import javax.persistence.*;
 public class Race {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator = "raceSeq")
-    @SequenceGenerator(name = "raceSeq",sequenceName = "raceSeq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "raceSeq")
+    @SequenceGenerator(name = "raceSeq", sequenceName = "raceSeq")
     @Column(name = "id", nullable = false)
     private int id;
     private String name;
@@ -31,7 +32,7 @@ public class Race {
         this.name = name;
     }
 
-    @Column(name="iconUrl", nullable = false)
+    @Column(name = "iconUrl", nullable = false)
     public String getIconUrl() {
         return iconUrl;
     }

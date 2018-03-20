@@ -13,8 +13,8 @@ public class Locations {
     private Army army;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator = "locSeq")
-    @SequenceGenerator(name = "locSeq",sequenceName = "locSeq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "locSeq")
+    @SequenceGenerator(name = "locSeq", sequenceName = "locSeq")
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
@@ -100,7 +100,8 @@ public class Locations {
         this.army = army;
     }
 
-    public Locations(){    }
+    public Locations() {
+    }
 
     public Locations(String name, int level, int experience, int gold, Army army) {
         this.name = name;

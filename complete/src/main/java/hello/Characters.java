@@ -8,8 +8,8 @@ import java.util.*;
 public class Characters {
     private String name;
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator = "charSeq")
-    @SequenceGenerator(name="charSeq",sequenceName = "charSeq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "charSeq")
+    @SequenceGenerator(name = "charSeq", sequenceName = "charSeq")
     @Column(name = "id", nullable = false)
     private int id;
     private String clazz;
@@ -101,9 +101,9 @@ public class Characters {
         this.race = race;
     }
 
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, targetEntity = Abilities.class)
-    @JoinTable(name = "character_abilities", joinColumns = @JoinColumn(name="character_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ability_id", referencedColumnName = "id"))
-    private List<Abilities> abilities=new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, targetEntity = Abilities.class)
+    @JoinTable(name = "character_abilities", joinColumns = @JoinColumn(name = "character_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "ability_id", referencedColumnName = "id"))
+    private List<Abilities> abilities = new ArrayList<>();
 
     public List<Abilities> getAbilities() {
         return abilities;
@@ -113,7 +113,9 @@ public class Characters {
         this.abilities = abilities;
     }
 
-    public void addAbility(Abilities ability){this.abilities.add(ability);}
+    public void addAbility(Abilities ability) {
+        this.abilities.add(ability);
+    }
 
     public Characters() {
     }

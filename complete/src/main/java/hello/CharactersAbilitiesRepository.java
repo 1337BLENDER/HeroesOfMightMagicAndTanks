@@ -1,4 +1,5 @@
 package hello;
+
 import hello.CharactersAbilities;
 
 import org.springframework.data.repository.CrudRepository;

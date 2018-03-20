@@ -33,20 +33,22 @@ public class HomeController {
 */
 
     @RequestMapping("/")
-    public String home(){
+    public String home() {
         return "index";
     }
 
     @RequestMapping("/login")
-    public String login(){
+    public String login() {
         return "index";
     }
 
     @RequestMapping("/registration")
-    public String registration(){
+    public String registration() {
         return "registration";
     }
 
     @RequestMapping("/lk")
-    public String lk(){return "lk";}
+    public String lk() {
+        return "lk";
+    }
 }

@@ -24,16 +24,13 @@ public class AppUser {
 
     private String[] roles;
 
-    public void setPassword(String password) {
-        this.password = PASSWORD_ENCODER.encode(password);
+    private AppUser() {
     }
-
-    private AppUser() {}
 
     public AppUser(String name, String password, String... roles) {
         this.name = name;
-        this.setPassword(password);
-        this.roles=roles;
+        this.password = password;
+        this.roles = roles;
     }
 
     public String getName() {

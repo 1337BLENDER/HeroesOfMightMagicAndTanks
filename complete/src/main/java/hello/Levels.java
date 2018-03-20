@@ -9,8 +9,8 @@ public class Levels {
     private int experience;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE,generator = "levSeq")
-    @SequenceGenerator(name = "levSeq",sequenceName = "levSeq")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "levSeq")
+    @SequenceGenerator(name = "levSeq", sequenceName = "levSeq")
     @Column(name = "level", nullable = false)
     public int getLevel() {
         return level;

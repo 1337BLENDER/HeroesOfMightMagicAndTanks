@@ -9,7 +9,7 @@ public class Friends {
     private Users user2;
 
     @Id
-    @GeneratedValue(strategy=GenerationType.TABLE)
+    @GeneratedValue(strategy = GenerationType.TABLE)
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;
