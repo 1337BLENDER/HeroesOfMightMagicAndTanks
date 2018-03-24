@@ -76,14 +76,18 @@ public class FriendsService {
      * @return buildingInCities entities
      */
 
-    public Iterable<Friends> getAllByUser1(Users user) {
-        Iterable<Friends> friends = friendRepository.findAllByUser1(user);
+    public Iterable<Friends> getAllByUser1(String user) {
+        Iterable<Friends> friends = friendRepository.findAllByUser1_Nick(user);
         for (Friends friend : friends) {
             if (friend != null) {
                 init(friend);
             }
         }
         return friends;
+    }
+
+    public Friends getByNicks(String nick1,String nick2){
+        return friendRepository.findFirstByUser1_NickAndUser2_Nick(nick1,nick2);
     }
 
     /**
@@ -105,6 +109,10 @@ public class FriendsService {
 
     public void deleteById(int id) {
         friendRepository.delete(id);
+    }
+
+    public void deleteByNicks(String nick1,String nick2){
+        friendRepository.deleteByUser1_NickAndUser2_Nick(nick1,nick2);
     }
 
     /**

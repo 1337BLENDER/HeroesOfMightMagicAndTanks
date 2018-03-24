@@ -1,5 +1,6 @@
 package hello;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,6 +29,7 @@ public class Users {
     private double winrate;
     private int numberOfBattles;
     //    private int experience;
+    @JsonIgnore
     private Collection<Friends> friends;
     private Characters character;
     //    private Cities city;

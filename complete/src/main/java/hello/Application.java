@@ -153,7 +153,7 @@ public class Application {
             for(Army army:armyService.getAll()){
                 log.info(army.toString());
             }
-            log.info(armyService.getFirstById(1).toString());
+            log.info(armyService.getLastById().toString());
 
             locationsService.saveOrUpdate(new Locations("Засада Орков",1,100,1000,armies.get(2)));
             locationsService.saveOrUpdate(new Locations("Странный союз",1,100,1000,armies.get(3)));

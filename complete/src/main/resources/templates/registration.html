@@ -121,10 +121,10 @@
             <table class="tableR">
                 <tbody>
                     <tr>
-                        <% shownUnits.forEach(unit=>{print("<th height='200' style='background-image: url(" + unit.iconUrl + "); background-repeat: round;'></th>")}) %>
+                        <% shownUnits.forEach(unit=>{print("<td height='200' style='background-image: url(" + unit.iconUrl + "); background-repeat: round;'></td>")}) %>
                     </tr>
                     <tr>
-                        <% shownUnits.forEach(unit=>{print("<th style='text-align: left;'>"+
+                        <% shownUnits.forEach(unit=>{print("<td style='text-align: left;'>"+
                         "<label>Название: "+unit.name+"</label></br>"+
                         "<label>Раса: "+unit.race.name+"</label></br>"+
                         "<label>Тип: "+unit.type+"</label></br>"+
@@ -133,7 +133,7 @@
                         "<label>Урон: "+unit.damage+"</label></br>"+
                         "<label>Дальность: "+unit.range+"</label></br>"+
                         "<label>Снаряды: "+unit.ammo+"</label></br>"+
-                        "</th>")})%>
+                        "</td>")})%>
                     </tr>
                     <tr>
                         <% shownUnitCount.forEach((count,index)=>{print("<th><label>Увас в армии</label></br><input type='button' id='minus"+(index+1)+"' value='-'><input id='count"+(index+1)+"' type='number' min='0' max='100' value='"+count+"'><input type='button' id='plus"+(index+1)+"' value='+'></th>")})%>

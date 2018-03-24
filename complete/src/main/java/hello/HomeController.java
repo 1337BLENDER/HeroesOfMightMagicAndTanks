@@ -51,4 +51,9 @@ public class HomeController {
     public String lk() {
         return "lk";
     }
+
+    @RequestMapping("/friends")
+    public String friends() {
+        return "friends";
+    }
 }

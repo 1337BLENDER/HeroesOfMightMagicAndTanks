@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>HoMMT</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css"/>
+    <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="/js/underscore.js"></script>
+    <script type="text/javascript" src="/js/backbone.js"></script>
+    <script type="text/javascript" src="/js/friends.js"></script>
+</head>
+<body class="background">
+<div class="spec"></div>
+<br/>
+<a class="c" href="/lk" >В ЛК</a>
+<br/>
+
+<div id="block"></div>
+
+<script type="text/template" id="none">
+    <![CDATA[
+    <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
+    <div class="search">
+        <input type="text" id="searchField"/>
+        <label for="searchField">Найти игрока</label>
+        <input type="button" id="searchButton" value="Найти"/>
+    </div>
+    <%print("<p class='success'>"+successMessage+"</p>");%>
+    <div class="friendList">
+        <table class="friendListTable">
+            <tbody>
+            <tr>
+                <th class="lefted">Мои друзья:</th>
+            </tr>
+            <tr>
+                <td class="righted">
+                    Онлайн
+                </td>
+            </tr>
+            <%
+            var i=0;
+            friends.forEach((friend)=>{
+            if(friend.online==true){
+            i++;
+            print("<tr class='friend' ><td class='lefted' id='"+friend.name +"'>"+friend.name+"</td></tr>")
+            }
+            });
+            print("<tr><td class='righted'>Всего: "+i+"</td></tr>")
+            %>
+            <tr>
+                <td class="righted">
+                    Оффлайн
+                </td>
+            </tr>
+            <%
+            i=0;
+            friends.forEach((friend)=>{
+            if(friend.online==false&&friend.friend==true){
+            i++;
+            print("<tr class='friend'><td class='lefted' id='"+friend.name+"'>"+friend.name+"</td></tr>")
+            }
+            });
+            print("<tr><td class='righted'>Всего: "+i+"</td></tr>")
+            %>
+            <tr>
+                <td class="righted">
+                    Приглашенные
+                </td>
+            </tr>
+            <%
+            i=0;
+            friends.forEach((friend)=>{
+            if(friend.friend==false&&friend.deleted==false){
+            i++;
+            print("<tr class='friend'><td class='lefted' id='"+ friend.name+"'>"+friend.name+"</td></tr>")
+            }
+            });
+            print("<tr><td class='righted'>Всего: "+i+"</td></tr>")
+            %>
+            <tr>
+                <td class="righted">
+                    Отклонившие / Удалившие
+                </td>
+            </tr>
+            <%
+            i=0;
+            friends.forEach((friend)=>{
+            if(friend.deleted==true&&friend.friend==false){
+            i++;
+            print("<tr class='friend'><td class='lefted' id='"+ friend.name+ "'>"+friend.name+"</td></tr>")
+            }
+            });
+            print("<tr><td class='righted'>Всего: "+i+"</td></tr>")
+            %>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="centralPane">
+        <div class="userInfo">
+            <%
+            if(user!==null&&user!==undefined){
+                if(user.you){
+                    print("<p>Это вы</p>")
+                }else{
+                    if(user.restorable){
+                        print("<p>Вы удалили этого пользователя из друзей</p><input type='button' id='restore' value='Восстановить'/>")
+                    }else{
+                        if(user.deleted){
+                            print("<p>Пользователь удалил вас из своего списка друзей, или не принял вашу заявку в друзья. "+
+                            "Вы можете удалить его из списка друзей.</p><input type='button' id='"+"delete' value='Удалить'/>");
+                            print("<p>Или отправить ему сообщение с запросом на добавление в друзья.</p><input type='button' id='"+"invite' value='Написать'/>"+
+                            "<div class='messageSender' id='"+"messageSender'><textarea id='"+"message' placeholder='Сообщение для приглашаемого пользователя'></textarea>"
+                            +"<br/><input type='button' id='"+"submit' value='Отправить'/></div>")
+                        }else{
+                            if(user.friend){
+                                print("<p>Пользователь находится у вас в друзьях</p><input type='button' id='delete' value='Удалить'/>")
+                            }else{
+                                print("<p>Пользователь не находится у вас в друзьях. Вы можете написать ему сообщение и отправить ему запрос на добавление в друзья</p><input type='button' id='invite' value='Написать'/>"+
+                                "<div class='messageSender' id='messageSender'><textarea id='message' placeholder='Сообщение для приглашаемого пользователя'></textarea>"
+                                +"<br/><input type='button' id='submit' value='Отправить'/></div>")
+                            }
+                        }
+                    }
+                }
+
+                 print(
+                "<br/><label>Ник: "+user.name+"</label><br/>"+
+                "<label>Jabber: "+user.jabber+"</label><br/>"+
+                "<label>Количество боев: "+user.battles+"</label><br/>"+
+                "<label>Процент побед: "+user.winrate+"</label><br/>"+
+                "<label>Персонаж: "+user.character+"</label><br/>"+
+                "<label>Армия:</label><br/>");
+                user.army.forEach(unit=>{print("<label>"+unit.name+": "+unit.count+"</label><br/>")})
+            }else{
+                if(user===undefined){
+                    print("<div class='centerLabel'><label class='grey'>Выберите друга или задайте поиск по имени, чтобы посмотреть подробную информацию о пользователе</label></div>")
+                }
+                if(user===null){
+                    print("<div class='centerLabel'><label class='grey'>Пользователь не найден</label></div>")
+                }
+            }
+            %>
+        </div>
+        <div class="chat">
+
+        </div>
+    </div>
+
+    <div class="requestContainer">
+        <table class="requests">
+            <tbody>
+                <tr>
+                    <th>
+                        Запросы дружбы
+                    </th>
+                </tr>
+                <%
+                if(requests.length>0){
+                requests.forEach(request=>{
+                    print(
+                        "<tr><td><div>"+
+                        request.sender+"</div>"+
+                        "<div class='invMessage'>"+request.message+"</div>"+
+                        "<div class='buttonPane'><input type='button' id='no_"+request.sender+"' class='respond' value='Отклонить'/>"+
+                        "<input type='button' id='yes"+request.sender+"' class='respond' value='Принять'/></div></td></tr>"
+                    )
+                    })
+                }else{
+                    print("<tr><td>У вас нет запросов в друзья</td></tr>")
+                }
+                %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ]]> -->
+</script>
+
+<script type="text/template" id="player">
+    <![CDATA[
+    <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
+
+    <!-- ]]> -->
+</script>
+
+</body>
+</html>
