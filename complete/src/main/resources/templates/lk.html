@@ -2,13 +2,89 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>LK</title>
+    <title>HoMMT_LK</title>
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+    <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="/js/underscore.js"></script>
+    <script type="text/javascript" src="/js/backbone.js"></script>
+    <script type="text/javascript" src="/js/lk.js"></script>
 </head>
 <body>
-Hello, <span th:text="${#authentication.name}">user</span>.
+<div class="spec"></div>
+Привет, <span th:text="${#authentication.name}">user</span>.
 <form th:action="@{/logout}" method="post">
-    <input type="submit" value="Log Out"/>
+    <input type="submit" value="Выйти"/>
 </form>
-<a href="friends.html">friends</a>
+<div id="block"></div>
+<script type="text/template" id="main">
+    <![CDATA[
+    <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
+    <input type="button" class="margined" value="Друзья" id="friends"/>
+    <div class="bordered centerText">Данные вашего аккаунта</div>
+    <div id="stat">
+        <div class="floatLeft bordered">
+            <b>Статистика</b><br/>
+            Количество боев: <%print(" "+user.battles)%><br/>
+            Процент побед: <%print(" "+user.winrate)%>
+        </div>
+        <div class="floatLeft bordered">
+            <label class="success"><%print(successMessage)%></label><br/>
+            <label class="error"><%print(errorMessage)%></label><br/>
+            <label for="loginField">Ник(логин)</label>
+            <input class="margined" id="loginField" type="text" value='<%print(user.name)%>'/><br/>
+            <label class="margined" for="jabberField">Jabber</label>
+            <input class="margined" id="jabberField" type="text" value='<%print(user.jabber)%>'/>
+            <input class="margined" id="changeJabber" type="button" value="Сменить"> <br/>
+        </div>
+    </div>
+    <%print("<table><tbody><tr><td>")%>
+    <div class="bordered centerText">Ваш Персонаж</div>
+    <table class="tableR">
+        <% var tempChar = user.character %>
+        <tbody>
+        <tr>
+            <th width="25%">Персонаж</th>
+            <th width="75%" colspan="3">Способности</th>
+        </tr>
+        <tr>
+            <th>
+                <img src="<% print(tempChar.iconUrl) %>" width="200px" height="200px"><br/>
+                <label ><% print(tempChar.name) %></label><br/>
+                <label ><% print(tempChar.clazz) %></label>
+            </th>
+            <% tempChar.abilities.forEach(ability=>{print("<th style='text-align: left;'>"+
+            "<label>Название: "+ability.name+"</label><br/>"+
+            "<label>Цель: "+ability.target+"</label><br/>"+
+            "<label>Сила: "+ability.damage+"</label><br/>"+
+            "<label>Мана: "+ability.manaPoints+"</label><br/>"+
+            "<label>Описание:</label>"+
+            "<p>"+ability.description+"</p>")}) %>
+        </tr>
+        </tbody>
+    </table>
+    <div class="bordered centerText">Ваша Армия</div>
+    <% user.army.forEach(unitInArmy=>{
+    print("<div class='floatLeft'><table class='tableR'><tbody><tr><td class='centerText'><img class='centered' src='"+unitInArmy.unit.iconUrl+"' width='200px' height='200px'/></td></tr>"+
+    "<tr>"+"<td style='text-align: left;'>"+
+        "<label>Название: "+unitInArmy.unit.name+"</label><br/>"+
+        "<label>Количество: "+unitInArmy.count+"</label><br/>"+
+        "<label>Раса: "+unitInArmy.unit.race.name+"</label><br/>"+
+        "<label>Тип: "+unitInArmy.unit.type+"</label><br/>"+
+        "<label>Здоровье: "+unitInArmy.unit.hitpoints+"</label><br/>"+
+        "<label>Сила: "+unitInArmy.unit.power+"</label><br/>"+
+        "<label>Урон: "+unitInArmy.unit.damage+"</label><br/>"+
+        "<label>Дальность: "+unitInArmy.unit.range+"</label><br/>"+
+        "<label>Снаряды: "+unitInArmy.unit.ammo+"</label><br/>"+
+        "</td></tr></tbody></table></div>")
+    })%>
+    <p class="white">lol</p>
+    <!-- ]]> -->
+</script>
+<script type="text/template" id="second">
+    <![CDATA[
+    <!-- guard comment to prevent browsers from considering the previous and next lines as part of a comment -->
+
+    <!-- ]]> -->
+</script>
 </body>
 </html>

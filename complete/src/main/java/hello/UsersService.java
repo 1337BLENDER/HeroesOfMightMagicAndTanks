@@ -113,10 +113,13 @@ public class UsersService {
      * @return saved user
      */
 
-    public Users saveOrUpdate(Users user) {
-        AppUser appUser = new AppUser(user.getNick(), user.getPassword(), "ROLE_USER");
-        appUserRepository.save(appUser);
+    public Users save(Users user) {
+        appUserRepository.save(new AppUser(user.getNick(),user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public Users update(Users newUser){
+        return userRepository.save(newUser);
     }
 
     /**

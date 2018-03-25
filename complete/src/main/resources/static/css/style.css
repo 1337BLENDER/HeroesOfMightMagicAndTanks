@@ -138,7 +138,13 @@ mm > mm[title] {
 .bordered {
     border: 1px solid black;
     border-radius: 10px;
-    border-spacing: 10px;
+    padding: 5px;
+    margin: 5px;
+}
+
+.centerText{
+    align-content: center;
+    text-align: center;
 }
 
 .centered {
@@ -288,10 +294,10 @@ input::-webkit-inner-spin-button {
     border-radius: 10px;
     padding: 5px;
 }
-.messageSender{
+.hidden{
     display: none;
 }
-textarea{
+textarea#message{
     width: 200px;
     height: 50px;
 }
@@ -302,7 +308,58 @@ textarea{
     margin: 5px;
 }
 
+.chat{
+    overflow: auto;
+    height: 250px;
+    border: solid 1px black;
+}
+
+.myMessage{
+    border: solid 1px black;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: #a5d6f3;
+    float: right;
+}
+
+.hisMessage{
+    border: solid 1px black;
+    border-radius: 10px;
+    padding: 5px;
+    background-color: lightgreen;
+    float: left;
+}
+.inputText{
+    width: 100%;
+    height: 50px;
+}
+#send{
+    margin:  5px;
+}
+.white{
+    color: transparent;
+}
+
+.iconText{
+    color: white;
+    height: 200px;
+    width: 200px;
+}
+
+.floatLeft{
+    float: left;
+}
+
+.leftBorder{
+    border-left: solid 1px black;
+}
+
+.margined{
+    margin: 5px;
+}
+/*
 .background{
     background: url("/icons/background/friendBackground.jpg") repeat;
     background-size: 50px 50px;
 }
+*/

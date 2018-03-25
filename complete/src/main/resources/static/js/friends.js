@@ -10,6 +10,10 @@ $(function () {
         }
     );
 
+    var Chat = Backbone.Collection.extend({
+        url: "/secure/getChat"
+    });
+
     var Respond = Backbone.Model.extend({
         url: "/secure/respondFriendRequest"
     });
@@ -26,6 +30,10 @@ $(function () {
         url: "/secure/requestFriendship"
     });
 
+    var ChatMessage = Backbone.Model.extend({
+        url: "/secure/sendMessage"
+    });
+
     var Restore = Backbone.Model.extend({
         url: "/secure/restoreFriend"
     });
@@ -37,6 +45,8 @@ $(function () {
     var message = new Message();
     var respond = new Respond();
     var del = new Delete();
+    var chat = new Chat();
+    var chatMessage = new ChatMessage();
 
     var AppState = Backbone.Model.extend({
         defaults: {
@@ -44,7 +54,10 @@ $(function () {
             friends: [{name: "testFriend", online: true, isFriend: true}],//костыль, лень делать нормально
             user: undefined,
             requests: [],
-            successMessage: ""
+            chat: [],
+            successMessage: "",
+            scrolled: false,
+            scrollTop: 0
         }
     });
     refreshFriends();
@@ -85,7 +98,8 @@ $(function () {
             "click input.respond": "respondFriend",
             "click input#delete": "deleteFriend",
             "click td.lefted": "findFriend",
-            "click input#restore": "restoreFriend"
+            "click input#restore": "restoreFriend",
+            "click input#send": "sendMessage"
         },
 
         initialize: function () {
@@ -94,12 +108,25 @@ $(function () {
         },
 
         getUser: function (nick) {
+            appState.set({
+                scrolled:false
+            });
             if (nick !== "" && nick.length > 0) {
                 user.fetch({
                     data: {
                         name: nick
                     },
                     success: function () {
+                        chat.fetch({
+                            data: {
+                                name: nick
+                            },
+                            success: function () {
+                                appState.set({
+                                    chat: chat.toJSON()
+                                })
+                            }
+                        });
                         appState.set({
                             user: user.toJSON()
                         })
@@ -109,7 +136,7 @@ $(function () {
                             user: null
                         })
                     }
-                })
+                });
             }
         },
 
@@ -153,7 +180,7 @@ $(function () {
                     message: mess
                 },
                 complete: function () {
-                    if(message.get("message")==="success") {
+                    if (message.get("message") === "success") {
                         refreshFriends();
                         outThis.getUser(receiver);
                         appState.set({
@@ -178,9 +205,9 @@ $(function () {
                     respond: resp
                 },
                 complete: function () {
-                    if(respond.get("message")==="success") {
+                    if (respond.get("message") === "success") {
                         var user = outThis.model.get("user");
-                        if(user!==undefined&&user!==null) {
+                        if (user !== undefined && user !== null) {
                             outThis.getUser(user.name);
                         }
                         refreshFriends();
@@ -192,14 +219,14 @@ $(function () {
             });
         },
         deleteFriend: function () {
-            var nick=this.model.get("user").name;
+            var nick = this.model.get("user").name;
             var outThis = this;
             del.fetch({
-                data:{
+                data: {
                     name: nick
                 },
                 complete: function () {
-                    if(del.get("message")==="success") {
+                    if (del.get("message") === "success") {
                         refreshFriends();
                         outThis.getUser(nick);
                         appState.set({
@@ -213,11 +240,11 @@ $(function () {
             var nick = this.model.get("user").name;
             var outThis = this;
             restore.fetch({
-                data:{
+                data: {
                     name: nick
                 },
                 complete: function () {
-                    if(restore.get("message")==="success") {
+                    if (restore.get("message") === "success") {
                         refreshFriends();
                         outThis.getUser(nick);
                         appState.set({
@@ -227,7 +254,26 @@ $(function () {
                     }
                 }
             })
+        },
+        sendMessage: function () {
+            var nick = this.model.get("user").name;
+            var mess = $("textarea#chatTA").get(0).value.trim();
+            if (mess !== undefined && mess.length > 0) {
+                chatMessage.fetch({
+                    data: {
+                        name: nick,
+                        message: mess
+                    },
+                    complete: function () {
+                        if (chatMessage.get("message") === "success") {
+                            refreshChat();
+                            $("textarea#chatTA").get(0).value = ""
+                        }
+                    }
+                })
+            }
         }
+
     });
 
     var block = new Block({model: appState});
@@ -261,5 +307,39 @@ $(function () {
         })
     }
 
-    window.setInterval(refreshFriends, 10000)
+    function refreshChat() {
+        var user = appState.get("user");
+        var elem = $("div.chat").get(0);
+        if (elem !== undefined) {
+            appState.set({
+                scrollTop: elem.scrollTop
+            });
+            $("div.chat").get(0).scrollTop = appState.get("scrollTop")
+        }
+        if (user !== undefined && user !== null) {
+            chat.fetch({
+                data: {
+                    name: user.name
+                },
+                success: function () {
+                    appState.set({
+                        chat: chat.toJSON()
+                    });
+                    if (elem !== undefined) {
+                        if (appState.get("scrolled") === false) {
+                            appState.set({
+                                scrolled: true,
+                                scrollTop: elem.scrollHeight - elem.clientHeight
+                            });
+                            $("div.chat").get(0).scrollTop = appState.get("scrollTop");
+                        } else {
+                            $("div.chat").get(0).scrollTop = appState.get("scrollTop");
+                        }
+                    }
+                }
+            })
+        }
+    }
+    window.setInterval(refreshFriends, 10000);
+    window.setInterval(refreshChat, 1000)
 });

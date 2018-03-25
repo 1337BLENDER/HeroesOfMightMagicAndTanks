@@ -2,10 +2,13 @@ package hello;
 
 import hello.lightEntities.LightFriend;
 import hello.lightEntities.LightUser;
+import hello.lightEntities.MediumUnitsInArmy;
+import hello.lightEntities.MediumUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,9 +31,10 @@ public class SecureController {
     private final UnitsInArmyService unitsInArmyService;
     private FriendsService friendsService;
     private FriendRequestService friendRequestService;
+    private MessageService messageService;
 
     @Autowired
-    public SecureController(UsersService usersService, CharactersService charactersService, UnitsService unitsService, ArmyService armyService, UnitsInArmyService unitsInArmyService, FriendsService friendsService, FriendRequestService friendRequestService) {
+    public SecureController(UsersService usersService, CharactersService charactersService, UnitsService unitsService, ArmyService armyService, UnitsInArmyService unitsInArmyService, FriendsService friendsService, FriendRequestService friendRequestService, MessageService messageService) {
         this.usersService = usersService;
         this.charactersService = charactersService;
         this.unitsService = unitsService;
@@ -38,6 +42,7 @@ public class SecureController {
         this.unitsInArmyService = unitsInArmyService;
         this.friendsService = friendsService;
         this.friendRequestService = friendRequestService;
+        this.messageService = messageService;
     }
 
     public List<String> getUsersFromSessionRegistry() {
@@ -199,4 +204,42 @@ public class SecureController {
         friendRequestService.deleteBySenderAndReceiver(name,me.getNick());
         return "{\"message\":\"success\"}";
     }
+
+    @RequestMapping("/getChat")
+    public @ResponseBody List<Message> getChat(String name){
+        String myName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return messageService.getChat(myName,name);
+    }
+
+    @RequestMapping("/sendMessage")
+    public @ResponseBody String sendMessage(String name, String message){
+        String myName = SecurityContextHolder.getContext().getAuthentication().getName();
+        messageService.saveOrUpdate(new Message(myName,name,message));
+        return "{\"message\":\"success\"}";
+    }
+
+    @RequestMapping("/getFullUser")
+    public @ResponseBody MediumUser getFullUser(){
+        String myName = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = usersService.getByNick(myName);
+        if(user!=null) {
+            MediumUser mediumUser = new MediumUser(user.getNick(), user.getJabber(), user.getNumberOfBattles(), user.getWinrate(), user.getCharacter());
+            for (UnitsInArmy unitsInArmy : user.getArmy().getUnits()) {
+                mediumUser.addUnit(new MediumUnitsInArmy(unitsInArmy.getNumber(), unitsInArmy.getUnit()));
+            }
+            return mediumUser;
+        }else {
+            return null;
+        }
+    }
+
+    @RequestMapping("/changeJabber")
+    public @ResponseBody String changeJabber(String newJabber){
+        String myName = SecurityContextHolder.getContext().getAuthentication().getName();
+        Users user = usersService.getByNick(myName);
+        user.setJabber(newJabber);
+        usersService.update(user);
+        return "{\"message\":\"success\"}";
+    }
+
 }

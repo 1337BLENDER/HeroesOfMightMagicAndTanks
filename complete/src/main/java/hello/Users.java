@@ -164,6 +164,7 @@ public class Users {
         return result;
     }
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user1")
     public Collection<Friends> getFriends() {
         return friends;

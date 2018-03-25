@@ -110,7 +110,7 @@
                             print("<p>Пользователь удалил вас из своего списка друзей, или не принял вашу заявку в друзья. "+
                             "Вы можете удалить его из списка друзей.</p><input type='button' id='"+"delete' value='Удалить'/>");
                             print("<p>Или отправить ему сообщение с запросом на добавление в друзья.</p><input type='button' id='"+"invite' value='Написать'/>"+
-                            "<div class='messageSender' id='"+"messageSender'><textarea id='"+"message' placeholder='Сообщение для приглашаемого пользователя'></textarea>"
+                            "<div class='hidden' id='"+"messageSender'><textarea id='"+"message' placeholder='Сообщение для приглашаемого пользователя'></textarea>"
                             +"<br/><input type='button' id='"+"submit' value='Отправить'/></div>")
                         }else{
                             if(user.friend){
@@ -142,9 +142,30 @@
             }
             %>
         </div>
-        <div class="chat">
-
-        </div>
+        <%if(user!==undefined&&user!==null){
+        print("<div class='chat'> Чат с игроком <b>"+user.name+
+        "</b>");
+        var tdClass;
+        var trClass;
+        chat.forEach(message=>{
+            if(message.sender==user.name){
+                tdClass = "lefted";
+                trClass = "hisMessage"
+            }else{
+                tdClass = "righted";
+                trClass = "myMessage"
+            }
+        print("<div class='"+tdClass+"'><span class='"+trClass+"'><b>"+message.sender+"</b><br/>");
+        print(""+message.message+"</span><p class='white'> lol</p><br/></div>");
+        });
+        print("</div>");
+        print("<div class='chatInputs'>"+
+            "<label for='chatTA'>Введите сообщение и нажите</label><input id='send' type='button' value='Отправить'/><br/>"+
+            "<textarea id='chatTA' class='inputText'></textarea>"+
+            "</div>"
+        )
+        }
+        %>
     </div>
 
     <div class="requestContainer">

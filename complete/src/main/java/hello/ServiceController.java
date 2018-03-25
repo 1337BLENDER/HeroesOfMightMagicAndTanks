@@ -1,5 +1,6 @@
 package hello;
 
+import org.jivesoftware.smack.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ public class ServiceController {
     private UnitsService unitsService;
     private final ArmyService armyService;
     private final UnitsInArmyService unitsInArmyService;
+    private XMPPConnection connection;
 
     @Autowired
     public ServiceController(UsersService usersService, CharactersService charactersService, UnitsService unitsService, ArmyService armyService, UnitsInArmyService unitsInArmyService) {
@@ -26,6 +28,15 @@ public class ServiceController {
         this.unitsService = unitsService;
         this.armyService = armyService;
         this.unitsInArmyService = unitsInArmyService;
+        ConnectionConfiguration config = new ConnectionConfiguration("jabber.ru", 5222, "jabber.ru");
+        SASLAuthentication.supportSASLMechanism("PLAIN");
+        connection = new XMPPConnection(config);
+        try {
+            connection.connect();
+            connection.login("HOMMT", "ZIv3wywe");// т.е. не login@jabber.ru, а просто login
+        }catch (XMPPException ex){
+            ex.printStackTrace();
+        }
     }
 
     @RequestMapping("/getLeaderboard")
@@ -105,7 +116,20 @@ public class ServiceController {
         }
         army = armyService.getLastById();
         Characters character = charactersService.getByName(charName);
-        usersService.saveOrUpdate(new Users(nick, password, jabber, 0, 0, character, army));
+        usersService.save(new Users(nick, password, jabber, 0, 0, character, army));
+        if(connection.isConnected()) {
+            Chat chat = connection.getChatManager().createChat(jabber, new MessageListener() {
+                @Override
+                public void processMessage(Chat chat, org.jivesoftware.smack.packet.Message message) {
+                    System.out.println("Received message: " + message);
+                }
+            });
+            try {
+                chat.sendMessage("Ваш аккаунт "+nick+" успешно создан");
+            } catch (XMPPException ex) {
+                ex.printStackTrace();
+            }
+        }
         return new Response("success");
     }
 }

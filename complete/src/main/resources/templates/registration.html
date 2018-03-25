@@ -78,15 +78,16 @@
                         <th width="75%" colspan="3">Способности</th>
                     </tr>
                     <tr>
-                        <th style="background-image: url(<% print(tempChar.iconUrl) %>); background-repeat: round; vertical-align: bottom;">
-                            <label ><% print(tempChar.name) %></label></br>
+                        <th>
+                            <img src="<% print(tempChar.iconUrl) %>" width="200px" height="200px"><br/>
+                            <label ><% print(tempChar.name) %></label><br/>
                             <label ><% print(tempChar.clazz) %></label>
                         </th>
                         <% tempChar.abilities.forEach(ability=>{print("<th style='text-align: left;'>"+
-                        "<label>Название: "+ability.name+"</label></br>"+
-                        "<label>Цель: "+ability.target+"</label></br>"+
-                        "<label>Сила: "+ability.damage+"</label></br>"+
-                        "<label>Мана: "+ability.manaPoints+"</label></br>"+
+                        "<label>Название: "+ability.name+"</label><br/>"+
+                        "<label>Цель: "+ability.target+"</label><br/>"+
+                        "<label>Сила: "+ability.damage+"</label><br/>"+
+                        "<label>Мана: "+ability.manaPoints+"</label><br/>"+
                         "<label>Описание:</label>"+
                         "<p>"+ability.description+"</p>")}) %>
                     </tr>
@@ -121,22 +122,24 @@
             <table class="tableR">
                 <tbody>
                     <tr>
-                        <% shownUnits.forEach(unit=>{print("<td height='200' style='background-image: url(" + unit.iconUrl + "); background-repeat: round;'></td>")}) %>
+                            <%shownUnits.forEach(unit=>{
+                            print("<td class='centerText'><img class='centered' src='"+unit.iconUrl+"' width='200px' height='200px'/></td>")
+                            })%>
                     </tr>
                     <tr>
                         <% shownUnits.forEach(unit=>{print("<td style='text-align: left;'>"+
-                        "<label>Название: "+unit.name+"</label></br>"+
-                        "<label>Раса: "+unit.race.name+"</label></br>"+
-                        "<label>Тип: "+unit.type+"</label></br>"+
-                        "<label>Здоровье: "+unit.hitpoints+"</label></br>"+
-                        "<label>Сила: "+unit.power+"</label></br>"+
-                        "<label>Урон: "+unit.damage+"</label></br>"+
-                        "<label>Дальность: "+unit.range+"</label></br>"+
-                        "<label>Снаряды: "+unit.ammo+"</label></br>"+
+                        "<label>Название: "+unit.name+"</label><br/>"+
+                        "<label>Раса: "+unit.race.name+"</label><br/>"+
+                        "<label>Тип: "+unit.type+"</label><br/>"+
+                        "<label>Здоровье: "+unit.hitpoints+"</label><br/>"+
+                        "<label>Сила: "+unit.power+"</label><br/>"+
+                        "<label>Урон: "+unit.damage+"</label><br/>"+
+                        "<label>Дальность: "+unit.range+"</label><br/>"+
+                        "<label>Снаряды: "+unit.ammo+"</label><br/>"+
                         "</td>")})%>
                     </tr>
                     <tr>
-                        <% shownUnitCount.forEach((count,index)=>{print("<th><label>Увас в армии</label></br><input type='button' id='minus"+(index+1)+"' value='-'><input id='count"+(index+1)+"' type='number' min='0' max='100' value='"+count+"'><input type='button' id='plus"+(index+1)+"' value='+'></th>")})%>
+                        <% shownUnitCount.forEach((count,index)=>{print("<th><label>Увас в армии</label><br/><input type='button' id='minus"+(index+1)+"' value='-'><input id='count"+(index+1)+"' type='number' min='0' max='100' value='"+count+"'><input type='button' id='plus"+(index+1)+"' value='+'></th>")})%>
                     </tr>
                 </tbody>
             </table>

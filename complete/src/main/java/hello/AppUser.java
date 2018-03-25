@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.Arrays;
 
 @Entity
 public class AppUser {
@@ -43,5 +44,27 @@ public class AppUser {
 
     public String[] getRoles() {
         return roles;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRoles(String[] roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public String toString() {
+        return "AppUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", roles=" + Arrays.toString(roles) +
+                '}';
     }
 }
